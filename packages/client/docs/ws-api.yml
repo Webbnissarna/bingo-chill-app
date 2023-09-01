@@ -1,0 +1,62 @@
+asyncapi: "2.6.0"
+info:
+  title: Bingo Chillin' WebSockets API
+  version: "1.0.0"
+  description: |
+    API for communicating the state and interacting with
+    an ongoing bingo session.
+
+defaultContentType: application/json
+
+channels:
+  /:
+    description: Root endpoint used for all communication.
+    publish:
+      operationId: doConnect
+      message:
+        $ref: "#/components/messages/connectMessage"
+    subscribe:
+      operationId: onGameStateUpdated
+      message:
+        $ref: "#/components/messages/gameStateUpdateMessage"
+
+components:
+  messages:
+    connectMessage:
+      description: Request to fully connect and provide information about self
+      payload:
+        $ref: "#/components/schemas/connect"
+      x-response:
+        $ref: "#/components/messages/gameStateUpdateMessage"
+
+    gameStateUpdateMessage:
+      description: |
+        Sent when game state has been updated. May contain a partial
+        update or the entire game state.
+      payload:
+        $ref: "#/components/schemas/gameStateUpdate"
+
+  schemas:
+    player:
+      type: object
+      properties:
+        name:
+          type: string
+        icon:
+          type: string
+        color:
+          type: string
+        score:
+          type: integer
+
+    connect:
+      type: object
+      properties:
+        player:
+          $ref: "#/components/schemas/player"
+
+    gameStateUpdate:
+      type: object
+      properties:
+        a:
+          type: integer

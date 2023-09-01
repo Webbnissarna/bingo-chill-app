@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Subtitle renders 1`] = `
+<DocumentFragment>
+  <h1
+    class="font-heading text-snowStorm-2 text-3xl"
+  >
+    Hello World
+  </h1>
+</DocumentFragment>
+`;

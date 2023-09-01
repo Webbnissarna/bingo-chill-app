@@ -1,0 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code&family=Raleway:wght@400;700&family=Source+Sans+3:wght@400;700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-source-sans: "Source Sans 3";
+  --font-raleway: "Raleway";
+  --font-fira-code: "Fira Code";
+}

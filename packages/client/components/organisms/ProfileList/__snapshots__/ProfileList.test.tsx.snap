@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProfileList renders 1`] = `
+<DocumentFragment>
+  <div
+    class="flex gap-6 p-4 flex-wrap-reverse scrollbar-thin"
+  />
+</DocumentFragment>
+`;

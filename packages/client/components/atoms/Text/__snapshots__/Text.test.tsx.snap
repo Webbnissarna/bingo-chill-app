@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Text renders 1`] = `
+<DocumentFragment>
+  <span
+    class="font-text text-snowStorm-2 text-base"
+  >
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam voluptatibus officia voluptate dolores esse maiores omnis veniam harum pariatur animi vitae, numquam, nesciunt, velit sed blanditiis cupiditate? Cum, quaerat commodi.
+  </span>
+</DocumentFragment>
+`;

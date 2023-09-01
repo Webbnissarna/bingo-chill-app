@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GameControls renders 1`] = `
+<DocumentFragment>
+  <div
+    class="w-full flex flex-col gap-2 items-start"
+  >
+    <button
+      class="font-text font-base text-snowStorm-2 bg-polarNight-3 px-3 py-1 rounded-lg hover:bg-polarNight-2 active:bg-polarNight-1 transition"
+    >
+      Load Game Setup
+    </button>
+    <div
+      class="grid grid-cols-[auto_auto] gap-2 w-full"
+    >
+      <span
+        class="font-text text-snowStorm-2 text-base"
+      >
+        Seed
+      </span>
+      <div
+        class="flex gap-2"
+      >
+        <input
+          class="w-full font-text text-base text-snowStorm-2 outline-none border-none shadow-none bg-polarNight-0 rounded px-2 py-1 focus:bg-polarNight-2 transition"
+          type="number"
+          value="0"
+        />
+        <button
+          class="font-text font-base text-snowStorm-2 bg-polarNight-3 px-3 py-1 rounded-lg hover:bg-polarNight-2 active:bg-polarNight-1 transition"
+        >
+          R
+        </button>
+      </div>
+      <span
+        class="font-text text-snowStorm-2 text-base"
+      >
+        Tag Filter
+      </span>
+      <input
+        class="w-full font-text text-base text-snowStorm-2 outline-none border-none shadow-none bg-polarNight-0 rounded px-2 py-1 focus:bg-polarNight-2 transition"
+        type="text"
+        value=""
+      />
+      <span
+        class="font-text text-snowStorm-2 text-base"
+      >
+        Lockout?
+      </span>
+      <input
+        class="w-7 h-7 outline-none border-none rounded bg-polarNight-0 text-frost-3 focus:border-none cursor-pointer active:text-frost-2 transition"
+        type="checkbox"
+      />
+      <span
+        class="font-text text-snowStorm-2 text-base"
+      >
+        Time Limit
+      </span>
+      <input
+        class="w-full font-text text-base text-snowStorm-2 outline-none border-none shadow-none bg-polarNight-0 rounded px-2 py-1 focus:bg-polarNight-2 transition"
+        type="number"
+        value="0"
+      />
+    </div>
+    <button
+      class="font-text font-base text-snowStorm-2 bg-polarNight-3 px-3 py-1 rounded-lg hover:bg-polarNight-2 active:bg-polarNight-1 transition"
+    >
+      Start Game
+    </button>
+  </div>
+</DocumentFragment>
+`;

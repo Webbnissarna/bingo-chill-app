@@ -1,0 +1,22 @@
+{
+  "name": "@webbnissarna/bingo-chill-common",
+  "version": "1.0.0",
+  "private": true,
+  "license": "ISC",
+  "description": "Logic files common for bingo-chill sub-repos",
+  "files": [
+    "src/*"
+  ],
+  "dependencies": {
+    "@webbnissarna/bingo-chill-repo-common": "*",
+    "lodash.clonedeep": "^4.5.0",
+    "protobufjs": "^7.2.5"
+  },
+  "devDependencies": {
+    "@types/lodash.clonedeep": "^4.5.7",
+    "@typescript-eslint/eslint-plugin": "^6.5.0",
+    "@typescript-eslint/parser": "^6.5.0",
+    "eslint": "^8.48.0",
+    "prettier": "^3.0.3"
+  }
+}

@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Toggle renders 1`] = `
+<DocumentFragment>
+  <input
+    checked=""
+    class="w-7 h-7 outline-none border-none rounded bg-polarNight-0 text-frost-3 focus:border-none cursor-pointer active:text-frost-2 transition"
+    type="checkbox"
+  />
+</DocumentFragment>
+`;

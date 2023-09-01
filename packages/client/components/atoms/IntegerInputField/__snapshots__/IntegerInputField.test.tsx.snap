@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`IntegerInputField renders 1`] = `
+<DocumentFragment>
+  <input
+    class="w-full font-text text-base text-snowStorm-2 outline-none border-none shadow-none bg-polarNight-0 rounded px-2 py-1 focus:bg-polarNight-2 transition"
+    type="number"
+    value="0"
+  />
+</DocumentFragment>
+`;
