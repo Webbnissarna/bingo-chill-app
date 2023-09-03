@@ -1,16 +1,17 @@
-import { getSeededRandom, randRangeInt } from "./random";
+import SeedRandomRandomnessService from "./seedrandomRandomnessService";
 
-describe("Random", () => {
+describe("seedrandomRandomnessService", () => {
   const TEST_MIN = 1;
   const TEST_MAX = 100;
   const TEST_COUNT = 100000;
   const TEST_RANGE = TEST_MAX - TEST_MIN + 1;
 
   it("generates within range", () => {
-    const rng = getSeededRandom(1337);
+    const rng = new SeedRandomRandomnessService();
+    rng.setSeed(1337);
     const nums = Array(TEST_COUNT)
       .fill(0)
-      .map(() => randRangeInt(rng, TEST_MIN, TEST_MAX));
+      .map(() => rng.randRangeInt(TEST_MIN, TEST_MAX));
 
     const numsOutsideRange = nums.filter(
       (num) => num < TEST_MIN || num > TEST_MAX,
@@ -25,10 +26,11 @@ describe("Random", () => {
   });
 
   it("distributes fairly equally", () => {
-    const rng = getSeededRandom(1337);
+    const rng = new SeedRandomRandomnessService();
+    rng.setSeed(1337);
     const nums = Array(TEST_COUNT)
       .fill(0)
-      .map(() => randRangeInt(rng, TEST_MIN, TEST_MAX));
+      .map(() => rng.randRangeInt(TEST_MIN, TEST_MAX));
 
     const percentages = nums
       .reduce<number[]>((acc, num) => {
