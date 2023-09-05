@@ -31,7 +31,6 @@ export interface SessionOptions {
 
 export interface ActiveTask {
   name: string;
-  colors: string[];
 }
 
 export interface Profile {
@@ -56,4 +55,5 @@ export interface GameState {
   tasks: ActiveTask[];
   players: Player[];
   events: Event[];
+  isLockout: boolean;
 }

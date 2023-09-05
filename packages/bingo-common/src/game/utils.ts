@@ -6,6 +6,7 @@ const BLANK_GAME_STATE: GameState = {
   tasks: [],
   players: [],
   events: [],
+  isLockout: false,
 };
 
 export function getBlankGameState(): GameState {
