@@ -5,15 +5,11 @@ import type {
   GameState,
   Player,
   Profile,
-  SessionOptions,
-} from "@webbnissarna/bingo-chill-common/src/game/types";
-import type {
   ProfileUpdate,
+  SessionOptions,
   TaskUpdate,
-} from "@webbnissarna/bingo-chill-common/src/serialization/types";
+} from "@webbnissarna/bingo-chill-common/src/game/types";
 import { getBlankGameState } from "@webbnissarna/bingo-chill-common/src/game/utils";
-import { nanoid } from "nanoid";
-import type { RandomnessService } from "./RandomnessService/RandomnessService.types";
 import {
   HSVtoHEX,
   addIfMissing,
@@ -21,8 +17,10 @@ import {
   removeIfPresent,
   uniqueValuesReducer,
 } from "@webbnissarna/bingo-chill-common/src/utils/functional";
-import { filterTasks } from "./gameEngineUtils";
 import { nordThemeColors } from "@webbnissarna/bingo-chill-common/src/utils/theme";
+import { nanoid } from "nanoid";
+import type { RandomnessService } from "./RandomnessService/RandomnessService.types";
+import { filterTasks } from "./gameEngineUtils";
 
 export type GameStateChangedHandler = (gameState: GameState) => void;
 

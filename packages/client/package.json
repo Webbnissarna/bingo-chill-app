@@ -1,5 +1,5 @@
 {
-  "name": "bingo-chill-web",
+  "name": "@webbnissarna/bingo-chill-client",
   "version": "0.1.0",
   "private": true,
   "scripts": {

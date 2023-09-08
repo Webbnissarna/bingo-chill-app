@@ -52,8 +52,14 @@ export interface Event {
 
 export interface GameState {
   startTimestamp: string;
-  tasks: ActiveTask[];
   players: Player[];
+  tasks: ActiveTask[];
   events: Event[];
   isLockout: boolean;
+}
+
+export type ProfileUpdate = Partial<Profile>;
+export interface TaskUpdate {
+  index: number;
+  isCompleted: boolean;
 }

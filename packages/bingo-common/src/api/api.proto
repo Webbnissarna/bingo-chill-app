@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+message Player {
+  string name = 1;
+  string icon = 2;
+  string color = 3;
+}
+
+message GameStateUpdate {
+  optional repeated Player players = 1;
+  optional repeated Task tasks = 2;
+  optional repeated Event events = 3;
+}
+
+message TaskFilters {
+  repeated string includedTags = 1;
+  repeated string excludedTags = 2;
+}
+
+message SessionOptionsUpdate {
+  optional int32 seed = 1;
+  optional TaskFilters taskFilters = 2;
+  optional boolean isLockout = 3;
+  optional int32 timeLimitMinutes = 4;
+}
+
+message TaskUpdate {
+  int32 index = 1;
+  boolean isCompleted = 2;
+}
+
+message ApiMessageEnvelope {
+  string type = 1;
+
+  oneof payload {
+    string id = 2;
+    GameStateUpdate gameState = 3;
+    SessionOptionsUpdate options = 4;
+    Player profile = 5; 
+    TaskUpdate task = 6;
+  }
+}
