@@ -1,4 +1,5 @@
 import type {
+  Event,
   Profile,
   ProfileUpdate,
   SessionOptions,

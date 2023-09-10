@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import { WebSocket } from "ws";
 import yargs from "yargs/yargs";
+import readline from "readline";
 
 function parseArgs(): { uri: string } {
   return yargs()
@@ -36,7 +37,17 @@ async function run() {
   });
 
   ws.on("message", (data, isBinary) => {
-    console.log(chalk.gray(`[ws] message (binary=${isBinary}) ${data}`));
+    console.log(chalk.gray(`[ws] message (binary=${isBinary})`));
+  });
+
+  const rl = readline.createInterface({ input: process.stdin });
+  rl.addListener("line", (line) => {
+    const rCmd = line.match(/([^ ]*) (.*)/);
+
+    if (!rCmd) {
+      console.log(chalk.yellow("invalid line"));
+      return;
+    }
   });
 }
 

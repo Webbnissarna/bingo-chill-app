@@ -9,6 +9,7 @@ import type { IncomingMessage } from "http";
 import merge from "lodash.merge";
 import { WebSocketServer } from "ws";
 import type GameEngine from "./gameEngine";
+import { gameStateToGameStateUpdate } from "@webbnissarna/bingo-chill-common/src/api/apiGameAdapter";
 
 interface SocketMeta {
   id: string;
@@ -73,7 +74,10 @@ export default class WsGameServer {
       return;
     }
 
-    this.sendToAll({ type: "sGameStateUpdate", gameState });
+    this.sendToAll({
+      type: "sGameStateUpdate",
+      gameState: gameStateToGameStateUpdate(gameState),
+    });
   }
 
   private sendToAll(payload: ApiMessageEnvelope) {
@@ -121,7 +125,7 @@ export default class WsGameServer {
       this.serializer.serialize({ type: "sReceiveId", id: id }),
       this.serializer.serialize({
         type: "sGameStateUpdate",
-        gameState: this.gameEngine.getGameState(),
+        gameState: gameStateToGameStateUpdate(this.gameEngine.getGameState()),
       }),
       this.serializer.serialize({
         type: "sOptionsUpdate",

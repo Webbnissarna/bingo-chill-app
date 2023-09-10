@@ -6,10 +6,20 @@ message Player {
   string color = 3;
 }
 
+message Task {
+  int32 index = 1;
+  repeated string colors = 2;
+}
+
+message Event {
+  int32 elapsedTimeS = 1;
+  string message = 2;
+}
+
 message GameStateUpdate {
-  optional repeated Player players = 1;
-  optional repeated Task tasks = 2;
-  optional repeated Event events = 3;
+  repeated Player players = 1;
+  repeated Task tasks = 2;
+  repeated Event events = 3;
 }
 
 message TaskFilters {
@@ -20,13 +30,13 @@ message TaskFilters {
 message SessionOptionsUpdate {
   optional int32 seed = 1;
   optional TaskFilters taskFilters = 2;
-  optional boolean isLockout = 3;
+  optional bool isLockout = 3;
   optional int32 timeLimitMinutes = 4;
 }
 
 message TaskUpdate {
   int32 index = 1;
-  boolean isCompleted = 2;
+  bool isCompleted = 2;
 }
 
 message ApiMessageEnvelope {
