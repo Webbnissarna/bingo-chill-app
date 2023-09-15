@@ -17,12 +17,14 @@
     "lodash.clonedeep": "^4.5.0",
     "lodash.mergewith": "^4.6.2",
     "protobufjs": "^7.2.5",
+    "seedrandom": "^3.0.5",
     "ts-node": "^10.9.1"
   },
   "devDependencies": {
     "@types/jest": "^29.5.4",
     "@types/lodash.clonedeep": "^4.5.7",
     "@types/lodash.mergewith": "^4.6.7",
+    "@types/seedrandom": "^3.0.5",
     "@typescript-eslint/eslint-plugin": "^6.5.0",
     "@typescript-eslint/parser": "^6.5.0",
     "eslint": "^8.48.0",

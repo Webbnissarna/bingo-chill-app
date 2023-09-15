@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 import formsPlugins from "@tailwindcss/forms";
 import tailwindScrollbar from "tailwind-scrollbar";
+import { nordThemeColors } from "@webbnissarna/bingo-chill-common/src/utils/theme";
 
 const config: Config = {
   content: [

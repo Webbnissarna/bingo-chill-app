@@ -1,7 +1,7 @@
 import type { RandomnessService } from "./RandomnessService.types";
 import seedrandom from "seedrandom";
 
-export default class SeedRandomRandomnessService implements RandomnessService {
+export default class SeededRandom implements RandomnessService {
   private rng: seedrandom.PRNG;
 
   constructor() {

@@ -102,3 +102,7 @@ export function HSVtoHEX(h: number, s: number, v: number): string {
 
   return `#${hexR}${hexG}${hexB}`;
 }
+
+export function makePatch<T>(base: T, changed: T): Partial<T> {
+  return base;
+}

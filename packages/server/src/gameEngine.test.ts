@@ -7,11 +7,11 @@ import type {
   Player,
   Profile,
   SessionOptions,
+  ProfileUpdate,
 } from "@webbnissarna/bingo-chill-common/src/game/types";
-import type { ProfileUpdate } from "@webbnissarna/bingo-chill-common/src/serialization/types";
 import type { DateTimeService } from "@webbnissarna/bingo-chill-common/src/dateTime/types";
 import dayjs from "dayjs";
-import SeedRandomRandomnessService from "./RandomnessService/seedrandomRandomnessService";
+import SeededRandom from "@webbnissarna/bingo-chill-common/src/random/SeededRandom";
 import { uniqueValuesReducer } from "@webbnissarna/bingo-chill-common/src/utils/functional";
 
 const MOCK_GAME: GameSetup = {
@@ -81,6 +81,7 @@ const MOCK_GAME: GameSetup = {
 };
 
 const BLANK_OPTIONS: SessionOptions = {
+  checksum: 0,
   seed: 0,
   isLockout: false,
   taskFilters: { includedTags: [], excludedTags: [] },
@@ -115,7 +116,7 @@ describe("GameEngine", () => {
   it("fails if game setup contains duplicate tasks", () => {
     const gameEngine = new GameEngine({
       dateTime: new MockDateTimeProvider(),
-      rng: new SeedRandomRandomnessService(),
+      rng: new SeededRandom(),
     });
 
     gameEngine.loadSetup({
@@ -138,7 +139,7 @@ describe("GameEngine", () => {
   it("starts a game", () => {
     const gameEngine = new GameEngine({
       dateTime: new MockDateTimeProvider(),
-      rng: new SeedRandomRandomnessService(),
+      rng: new SeededRandom(),
     });
 
     gameEngine.loadSetup(MOCK_GAME);
@@ -152,7 +153,7 @@ describe("GameEngine", () => {
   it("fails to start if no game setup is loaded", () => {
     const gameEngine = new GameEngine({
       dateTime: new MockDateTimeProvider(),
-      rng: new SeedRandomRandomnessService(),
+      rng: new SeededRandom(),
     });
 
     gameEngine.startGame(BLANK_OPTIONS);
@@ -167,7 +168,7 @@ describe("GameEngine", () => {
   it("starts out blank", () => {
     const gameEngine = new GameEngine({
       dateTime: new MockDateTimeProvider(),
-      rng: new SeedRandomRandomnessService(),
+      rng: new SeededRandom(),
     });
 
     expect(gameEngine.getGameState().players).toHaveLength(0);
@@ -178,7 +179,7 @@ describe("GameEngine", () => {
   it("respect isLockout option", () => {
     const gameEngine = new GameEngine({
       dateTime: new MockDateTimeProvider(),
-      rng: new SeedRandomRandomnessService(),
+      rng: new SeededRandom(),
     });
 
     gameEngine.loadSetup(MOCK_GAME);
@@ -191,7 +192,7 @@ describe("GameEngine", () => {
     const dateTime = new MockDateTimeProvider();
     const gameEngine = new GameEngine({
       dateTime,
-      rng: new SeedRandomRandomnessService(),
+      rng: new SeededRandom(),
     });
     gameEngine.loadSetup(MOCK_GAME);
     gameEngine.startGame(BLANK_OPTIONS);
@@ -219,7 +220,7 @@ describe("GameEngine", () => {
   it("creates tasks", () => {
     const gameEngine = new GameEngine({
       dateTime: new MockDateTimeProvider(),
-      rng: new SeedRandomRandomnessService(),
+      rng: new SeededRandom(),
     });
 
     gameEngine.loadSetup(MOCK_GAME);
@@ -238,7 +239,7 @@ describe("GameEngine", () => {
   it("fails to generate if insufficient task pool", () => {
     const gameEngine = new GameEngine({
       dateTime: new MockDateTimeProvider(),
-      rng: new SeedRandomRandomnessService(),
+      rng: new SeededRandom(),
     });
 
     gameEngine.loadSetup({
@@ -263,7 +264,7 @@ describe("GameEngine", () => {
   it("doesn't generate duplicate tasks", () => {
     const gameEngine = new GameEngine({
       dateTime: new MockDateTimeProvider(),
-      rng: new SeedRandomRandomnessService(),
+      rng: new SeededRandom(),
     });
 
     gameEngine.loadSetup(MOCK_GAME);
@@ -280,7 +281,7 @@ describe("GameEngine", () => {
   it("respects includedTags filter", () => {
     const gameEngine = new GameEngine({
       dateTime: new MockDateTimeProvider(),
-      rng: new SeedRandomRandomnessService(),
+      rng: new SeededRandom(),
     });
 
     gameEngine.loadSetup(MOCK_GAME);
@@ -300,7 +301,7 @@ describe("GameEngine", () => {
   it("respects excludedTags filter", () => {
     const gameEngine = new GameEngine({
       dateTime: new MockDateTimeProvider(),
-      rng: new SeedRandomRandomnessService(),
+      rng: new SeededRandom(),
     });
 
     gameEngine.loadSetup(MOCK_GAME);
@@ -320,7 +321,7 @@ describe("GameEngine", () => {
   it("respects both includedTags and excludedTags filter together", () => {
     const gameEngine = new GameEngine({
       dateTime: new MockDateTimeProvider(),
-      rng: new SeedRandomRandomnessService(),
+      rng: new SeededRandom(),
     });
 
     gameEngine.loadSetup(MOCK_GAME);
@@ -344,7 +345,7 @@ describe("GameEngine", () => {
     const expected2 = "";
     const gameEngine = new GameEngine({
       dateTime: new MockDateTimeProvider(),
-      rng: new SeedRandomRandomnessService(),
+      rng: new SeededRandom(),
     });
 
     gameEngine.startGame({ ...BLANK_OPTIONS, seed: 1337 });
@@ -374,7 +375,7 @@ describe("GameEngine", () => {
     };
     const gameEngine = new GameEngine({
       dateTime: new MockDateTimeProvider(),
-      rng: new SeedRandomRandomnessService(),
+      rng: new SeededRandom(),
     });
 
     const result = gameEngine.addPlayer();
@@ -390,7 +391,7 @@ describe("GameEngine", () => {
   it("sets defaults for new players", () => {
     const gameEngine = new GameEngine({
       dateTime: new MockDateTimeProvider(),
-      rng: new SeedRandomRandomnessService(),
+      rng: new SeededRandom(),
     });
     gameEngine.loadSetup(MOCK_GAME);
     gameEngine.startGame(BLANK_OPTIONS);
@@ -417,7 +418,7 @@ describe("GameEngine", () => {
   it("doesn't reuse player default names", () => {
     const gameEngine = new GameEngine({
       dateTime: new MockDateTimeProvider(),
-      rng: new SeedRandomRandomnessService(),
+      rng: new SeededRandom(),
     });
     gameEngine.loadSetup(MOCK_GAME);
     gameEngine.startGame(BLANK_OPTIONS);
@@ -442,7 +443,7 @@ describe("GameEngine", () => {
   it("removes a player", () => {
     const gameEngine = new GameEngine({
       dateTime: new MockDateTimeProvider(),
-      rng: new SeedRandomRandomnessService(),
+      rng: new SeededRandom(),
     });
 
     const id = gameEngine.addPlayer().id;
@@ -465,7 +466,7 @@ describe("GameEngine", () => {
     };
     const gameEngine = new GameEngine({
       dateTime: new MockDateTimeProvider(),
-      rng: new SeedRandomRandomnessService(),
+      rng: new SeededRandom(),
     });
 
     const id = gameEngine.addPlayer().id;
@@ -480,7 +481,7 @@ describe("GameEngine", () => {
   it("updates task", () => {
     const gameEngine = new GameEngine({
       dateTime: new MockDateTimeProvider(),
-      rng: new SeedRandomRandomnessService(),
+      rng: new SeededRandom(),
     });
 
     gameEngine.loadSetup(MOCK_GAME);
@@ -504,7 +505,7 @@ describe("GameEngine", () => {
   it("updates player when task is updated", () => {
     const gameEngine = new GameEngine({
       dateTime: new MockDateTimeProvider(),
-      rng: new SeedRandomRandomnessService(),
+      rng: new SeededRandom(),
     });
     gameEngine.loadSetup(MOCK_GAME);
     gameEngine.startGame(BLANK_OPTIONS);
@@ -531,7 +532,7 @@ describe("GameEngine", () => {
   it("does nothing if lockout and player tries to claim completed task", () => {
     const gameEngine = new GameEngine({
       dateTime: new MockDateTimeProvider(),
-      rng: new SeedRandomRandomnessService(),
+      rng: new SeededRandom(),
     });
     gameEngine.loadSetup(MOCK_GAME);
     gameEngine.startGame({ ...BLANK_OPTIONS, isLockout: true });
@@ -550,7 +551,7 @@ describe("GameEngine", () => {
     it("calls callback when player is added", () => {
       const gameEngine = new GameEngine({
         dateTime: new MockDateTimeProvider(),
-        rng: new SeedRandomRandomnessService(),
+        rng: new SeededRandom(),
       });
       const callback = jest.fn();
       gameEngine.setGameStateChangedHandler(callback);
@@ -564,7 +565,7 @@ describe("GameEngine", () => {
     it("calls callback when player is removed", () => {
       const gameEngine = new GameEngine({
         dateTime: new MockDateTimeProvider(),
-        rng: new SeedRandomRandomnessService(),
+        rng: new SeededRandom(),
       });
       const callback = jest.fn();
 
@@ -579,7 +580,7 @@ describe("GameEngine", () => {
     it("calls callback when profile is updated", () => {
       const gameEngine = new GameEngine({
         dateTime: new MockDateTimeProvider(),
-        rng: new SeedRandomRandomnessService(),
+        rng: new SeededRandom(),
       });
       const callback = jest.fn();
 
@@ -593,7 +594,7 @@ describe("GameEngine", () => {
     it("calls callback when task is updated", () => {
       const gameEngine = new GameEngine({
         dateTime: new MockDateTimeProvider(),
-        rng: new SeedRandomRandomnessService(),
+        rng: new SeededRandom(),
       });
       const callback = jest.fn();
 
@@ -610,7 +611,7 @@ describe("GameEngine", () => {
     it("calls callback when a new event occurred", () => {
       const gameEngine = new GameEngine({
         dateTime: new MockDateTimeProvider(),
-        rng: new SeedRandomRandomnessService(),
+        rng: new SeededRandom(),
       });
       const callback = jest.fn();
 
@@ -622,14 +623,14 @@ describe("GameEngine", () => {
         taskFilters: { includedTags: ["does not exist"], excludedTags: [] },
       });
 
-      expect(callback).toHaveBeenCalledTimes(2);
+      expect(callback).toHaveBeenCalledTimes(3);
       expect(callback).toHaveBeenCalledWith(gameEngine.getGameState());
     });
 
     it("does not call callback when attempting to remove non-existing player", () => {
       const gameEngine = new GameEngine({
         dateTime: new MockDateTimeProvider(),
-        rng: new SeedRandomRandomnessService(),
+        rng: new SeededRandom(),
       });
       const callback = jest.fn();
 
@@ -642,7 +643,7 @@ describe("GameEngine", () => {
     it("does not call callback when attempting to update non-existing player", () => {
       const gameEngine = new GameEngine({
         dateTime: new MockDateTimeProvider(),
-        rng: new SeedRandomRandomnessService(),
+        rng: new SeededRandom(),
       });
       const callback = jest.fn();
 
@@ -656,7 +657,7 @@ describe("GameEngine", () => {
       const dateTime = new MockDateTimeProvider();
       const gameEngine = new GameEngine({
         dateTime,
-        rng: new SeedRandomRandomnessService(),
+        rng: new SeededRandom(),
       });
       const callback = jest.fn();
 
@@ -672,7 +673,7 @@ describe("GameEngine", () => {
     it("does not call callback when task is unchanged after update", () => {
       const gameEngine = new GameEngine({
         dateTime: new MockDateTimeProvider(),
-        rng: new SeedRandomRandomnessService(),
+        rng: new SeededRandom(),
       });
       const callback = jest.fn();
 
@@ -690,7 +691,7 @@ describe("GameEngine", () => {
       const dateTime = new MockDateTimeProvider();
       const gameEngine = new GameEngine({
         dateTime,
-        rng: new SeedRandomRandomnessService(),
+        rng: new SeededRandom(),
       });
       gameEngine.loadSetup(MOCK_GAME);
 
@@ -709,7 +710,7 @@ describe("GameEngine", () => {
       const dateTime = new MockDateTimeProvider();
       const gameEngine = new GameEngine({
         dateTime,
-        rng: new SeedRandomRandomnessService(),
+        rng: new SeededRandom(),
       });
       gameEngine.loadSetup(MOCK_GAME);
       gameEngine.startGame(BLANK_OPTIONS);
@@ -733,7 +734,7 @@ describe("GameEngine", () => {
       const dateTime = new MockDateTimeProvider();
       const gameEngine = new GameEngine({
         dateTime,
-        rng: new SeedRandomRandomnessService(),
+        rng: new SeededRandom(),
       });
       gameEngine.loadSetup(MOCK_GAME);
       gameEngine.startGame(BLANK_OPTIONS);
@@ -753,7 +754,7 @@ describe("GameEngine", () => {
       const dateTime = new MockDateTimeProvider();
       const gameEngine = new GameEngine({
         dateTime,
-        rng: new SeedRandomRandomnessService(),
+        rng: new SeededRandom(),
       });
       gameEngine.loadSetup(MOCK_GAME);
       gameEngine.startGame(BLANK_OPTIONS);
@@ -777,7 +778,7 @@ describe("GameEngine", () => {
       const dateTime = new MockDateTimeProvider();
       const gameEngine = new GameEngine({
         dateTime,
-        rng: new SeedRandomRandomnessService(),
+        rng: new SeededRandom(),
       });
       gameEngine.loadSetup(MOCK_GAME);
       gameEngine.startGame(BLANK_OPTIONS);
@@ -815,6 +816,10 @@ describe("GameEngine", () => {
       });
     });
 
+    it("adds event when time is up", () => {
+      expect(true).toBe(false); // TODO
+    });
+
     it.each([
       /* rows */
       ["r1", [0, 1, 2, 3, 4]],
@@ -838,7 +843,7 @@ describe("GameEngine", () => {
       const dateTime = new MockDateTimeProvider();
       const gameEngine = new GameEngine({
         dateTime,
-        rng: new SeedRandomRandomnessService(),
+        rng: new SeededRandom(),
       });
       gameEngine.loadSetup(MOCK_GAME);
       gameEngine.startGame(BLANK_OPTIONS);

@@ -3,14 +3,19 @@ import Text from "@/components/atoms/Text";
 import TextButton from "@/components/atoms/TextButton";
 import TextInputField from "@/components/atoms/TextInputField";
 import Toggle from "@/components/atoms/Toggle";
-import type { GameOptions } from "@/services/GameService/GameService.types";
 import { ServiceRegistryContext } from "@/services/ServiceRegistry/ServiceRegistryContext";
 import merge from "lodash.merge";
 import { useCallback, useContext } from "react";
 
+export interface GameControlOptions {
+  seed: number;
+  isLockout: boolean;
+  timeLimitMinutes: number;
+}
+
 interface GameControlsProps {
-  options: GameOptions;
-  onChange: (newOptions: GameOptions) => void;
+  options: GameControlOptions;
+  onChange: (newOptions: GameControlOptions) => void;
   onLoadGameSetup: () => void;
   onStartGame: () => void;
 }
@@ -24,7 +29,7 @@ export default function GameControls({
   const serviceRegistry = useContext(ServiceRegistryContext);
 
   const updateOptions = useCallback(
-    (update: Partial<GameOptions>) => {
+    (update: Partial<GameControlOptions>) => {
       onChange({ ...merge(options, update) });
     },
     [options, onChange],
@@ -32,7 +37,7 @@ export default function GameControls({
 
   const randomizeSeed = () => {
     const rng = serviceRegistry.get("Randomness");
-    const seed = rng.next(0, 10000000);
+    const seed = rng.randRangeInt(0, 10000000);
     updateOptions({ seed });
   };
 
@@ -54,8 +59,8 @@ export default function GameControls({
 
         <Text>Lockout?</Text>
         <Toggle
-          checked={options.lockout}
-          onChange={(lockout) => updateOptions({ lockout })}
+          checked={options.isLockout}
+          onChange={(isLockout) => updateOptions({ isLockout })}
         />
 
         <Text>Time Limit</Text>

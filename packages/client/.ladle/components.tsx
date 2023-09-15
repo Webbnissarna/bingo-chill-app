@@ -1,11 +1,11 @@
 import React from "react";
-import DefaultServiceRegistryProvider from "../services/ServiceRegistry/ServiceRegistryContext";
+import { ProviderStack } from "../components/utils";
 import type { GlobalProvider } from "@ladle/react";
 
 import "./style.css";
 
 export const Provider: GlobalProvider = ({ children, globalState }) => (
-  <DefaultServiceRegistryProvider>{children}</DefaultServiceRegistryProvider>
+  <ProviderStack>{children}</ProviderStack>
 );
 
 export const argTypes = {

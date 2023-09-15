@@ -4,6 +4,7 @@ message Player {
   string name = 1;
   string icon = 2;
   string color = 3;
+  int32 score = 4;
 }
 
 message Task {
@@ -28,10 +29,11 @@ message TaskFilters {
 }
 
 message SessionOptionsUpdate {
-  optional int32 seed = 1;
-  optional TaskFilters taskFilters = 2;
-  optional bool isLockout = 3;
-  optional int32 timeLimitMinutes = 4;
+  int32 checksum = 1;
+  int32 seed = 2;
+  TaskFilters taskFilters = 3;
+  bool isLockout = 4;
+  int32 timeLimitMinutes = 5;
 }
 
 message TaskUpdate {

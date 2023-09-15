@@ -6,15 +6,19 @@ import type {
   TaskUpdate,
 } from "../game/types";
 
-export type SessionOptionsUpdate = Partial<SessionOptions>;
+export type SessionOptionsUpdate = SessionOptions;
 
 export interface Task {
   index: number;
   colors: string[];
 }
 
+export interface Player extends Profile {
+  score: number;
+}
+
 export interface GameStateUpdate {
-  players?: Profile[];
+  players?: Player[];
   tasks?: Task[];
   events?: Event[];
 }
@@ -25,7 +29,8 @@ type ClientMessageType =
   | "cUpdateProfile"
   | "cUpdateOptions"
   | "cRequestStart"
-  | "cUpdateTask";
+  | "cUpdateTask"
+  | "cRequestFullState";
 
 interface Envelope {
   type: ServerMessageType | ClientMessageType;
@@ -65,6 +70,10 @@ export interface ClientTaskUpdateEnvelope extends Envelope {
   task: TaskUpdate;
 }
 
+export interface ClientRequestFullStateEnvelope extends Envelope {
+  type: "cRequestFullState";
+}
+
 export type ApiMessageEnvelope =
   | ServerReceiveIdEnvelope
   | ServerGameStateUpdateEnvelope
@@ -72,7 +81,8 @@ export type ApiMessageEnvelope =
   | ClientProfileUpdateEnvelope
   | ClientUpdateOptionsEnvelope
   | ClientRequestStartEnvelope
-  | ClientTaskUpdateEnvelope;
+  | ClientTaskUpdateEnvelope
+  | ClientRequestFullStateEnvelope;
 
 export interface IApiServer {
   onUpdateProfile(update: ProfileUpdate): void;

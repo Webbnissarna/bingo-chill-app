@@ -19,7 +19,7 @@ import {
 } from "@webbnissarna/bingo-chill-common/src/utils/functional";
 import { nordThemeColors } from "@webbnissarna/bingo-chill-common/src/utils/theme";
 import { nanoid } from "nanoid";
-import type { RandomnessService } from "./RandomnessService/RandomnessService.types";
+import type { RandomnessService } from "@webbnissarna/bingo-chill-common/src/random/RandomnessService.types";
 import { filterTasks } from "./gameEngineUtils";
 
 export type GameStateChangedHandler = (gameState: GameState) => void;
@@ -157,6 +157,9 @@ export default class GameEngine implements IGameEngine {
       return;
     }
 
+    this.addEvent(
+      `(*server*): Loaded game **${setup.name}** (${setup.checksum})`,
+    );
     this.gameSetup = setup;
   }
 
@@ -262,6 +265,7 @@ export default class GameEngine implements IGameEngine {
     const task = this.gameState.tasks[update.index];
 
     if (!player || !task) {
+      console.warn(`bad player (${playerId}) or task (${update.index})`);
       return;
     }
 
@@ -278,6 +282,9 @@ export default class GameEngine implements IGameEngine {
       (this.gameState.isLockout && anyPlayerCompleted);
 
     if (noop) {
+      console.warn(
+        `update task noop (player ${playerId} task ${update.index})`,
+      );
       return;
     }
 

@@ -2,7 +2,7 @@ import type { StoryDefault } from "@ladle/react";
 import MainTemplate from ".";
 import { SPOOKY_GHOST_IMAGE_BASE64 } from "@/.ladle/constants";
 import { useState } from "react";
-import type { GameOptions } from "@/services/GameService/GameService.types";
+import type { GameOptions } from "@/services/GameServiceDEPRECATED/GameService.types";
 
 export function Default() {
   const [options, setOptions] = useState<GameOptions>({
@@ -23,7 +23,7 @@ export function Default() {
           icon: SPOOKY_GHOST_IMAGE_BASE64,
           colors: [],
         }))}
-      gameOptions={options}
+      gameControlOptions={options}
       profiles={Array(4)
         .fill(0)
         .map((_, i) => ({

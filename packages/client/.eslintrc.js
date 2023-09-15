@@ -22,6 +22,11 @@ module.exports = {
       node: {
         extensions: [".ts", ".tsx"],
       },
+      typescript: {
+        alwaysTryTypes: true,
+        // this resolves packages import problems
+        project: ["packages/*/tsconfig.json", "apps/*/tsconfig.json"],
+      },
     },
   },
   rules: {

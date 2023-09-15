@@ -1,4 +1,4 @@
-import SeedRandomRandomnessService from "./seedrandomRandomnessService";
+import SeededRandom from "./SeededRandom";
 
 function getPercentages(list: number[], totalCount: number): number[] {
   return list
@@ -36,7 +36,7 @@ describe("seedrandomRandomnessService", () => {
   const TEST_RANGE = TEST_MAX - TEST_MIN + 1;
 
   it("generates within range", () => {
-    const rng = new SeedRandomRandomnessService();
+    const rng = new SeededRandom();
     rng.setSeed(1337);
     const nums = Array(TEST_COUNT)
       .fill(0)
@@ -55,7 +55,7 @@ describe("seedrandomRandomnessService", () => {
   });
 
   it("distributes fairly equally", () => {
-    const rng = new SeedRandomRandomnessService();
+    const rng = new SeededRandom();
     rng.setSeed(1337);
     const nums = Array(TEST_COUNT)
       .fill(0)
@@ -69,7 +69,7 @@ describe("seedrandomRandomnessService", () => {
   });
 
   it("randomizes unique lists", () => {
-    const rng = new SeedRandomRandomnessService();
+    const rng = new SeededRandom();
     rng.setSeed(1337);
 
     const count = 10;

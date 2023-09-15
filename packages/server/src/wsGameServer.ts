@@ -6,10 +6,13 @@ import type {
 import type { Serializer } from "@webbnissarna/bingo-chill-common/src/serialization/types";
 import chalk from "chalk";
 import type { IncomingMessage } from "http";
-import merge from "lodash.merge";
 import { WebSocketServer } from "ws";
 import type GameEngine from "./gameEngine";
-import { gameStateToGameStateUpdate } from "@webbnissarna/bingo-chill-common/src/api/apiGameAdapter";
+import {
+  gameStateToGameStateUpdate,
+  hydrateOptions,
+} from "@webbnissarna/bingo-chill-common/src/api/apiGameAdapter";
+import { patch } from "@webbnissarna/bingo-chill-common/src/utils/functional";
 
 interface SocketMeta {
   id: string;
@@ -36,6 +39,7 @@ export default class WsGameServer {
     this.playerSocketMap = {};
     this.gameEngine = gameEngine;
     this.sessionOptions = {
+      checksum: -1,
       isLockout: false,
       seed: 0,
       taskFilters: {
@@ -136,33 +140,51 @@ export default class WsGameServer {
     joinEvents.forEach((event) => socket.send(event));
   }
 
-  private updateSessionOptions(update: Partial<SessionOptions>) {
-    this.sessionOptions = merge(this.sessionOptions, update);
+  private updateSessionOptions(update: SessionOptions) {
+    this.sessionOptions = patch(this.sessionOptions, hydrateOptions(update));
     this.sendToAll({ type: "sOptionsUpdate", options: update });
   }
 
   private handleClientMessage(playerId: string, event: MessageEvent<unknown>) {
-    const envelope = this.serializer.deserialize(event.data as Uint8Array);
+    try {
+      const envelope = this.serializer.deserialize(event.data as Uint8Array);
 
-    switch (envelope.type) {
-      case "cUpdateProfile":
-        this.gameEngine.updateProfile(playerId, envelope.profile);
-        break;
+      switch (envelope.type) {
+        case "cUpdateProfile":
+          this.gameEngine.updateProfile(playerId, envelope.profile);
+          break;
 
-      case "cUpdateOptions":
-        this.updateSessionOptions(envelope.options);
-        break;
+        case "cUpdateOptions":
+          this.updateSessionOptions(envelope.options);
+          break;
 
-      case "cRequestStart":
-        this.gameEngine.startGame(this.sessionOptions);
-        break;
+        case "cRequestStart":
+          this.gameEngine.startGame(this.sessionOptions);
+          break;
 
-      case "cUpdateTask":
-        this.gameEngine.updateTask(playerId, envelope.task);
-        break;
+        case "cUpdateTask":
+          this.gameEngine.updateTask(playerId, envelope.task);
+          break;
 
-      default:
-        break;
+        case "cRequestFullState":
+          this.playerSocketMap[playerId].socket.send(
+            this.serializer.serialize({
+              type: "sGameStateUpdate",
+              gameState: gameStateToGameStateUpdate(
+                this.gameEngine.getGameState(),
+              ),
+            }),
+          );
+          break;
+
+        default:
+          console.warn(
+            chalk.yellow(`Unhandled envelope type: ${envelope.type}`),
+          );
+          break;
+      }
+    } catch (error) {
+      this.playerSocketMap[playerId]?.socket?.close(1008, `you bad (${error})`);
     }
   }
 

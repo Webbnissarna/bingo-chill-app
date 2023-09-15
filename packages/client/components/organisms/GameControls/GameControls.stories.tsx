@@ -1,6 +1,6 @@
 import { useState } from "react";
 import GameControls from ".";
-import type { GameOptions } from "@/services/GameService/GameService.types";
+import type { GameOptions } from "@/services/GameServiceDEPRECATED/GameService.types";
 import type { StoryDefault } from "@ladle/react";
 
 export function Default() {

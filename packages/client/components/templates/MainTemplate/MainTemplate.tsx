@@ -4,18 +4,18 @@ import { Board, GameControls, ProfileList } from "@/components/organisms";
 import type { Event } from "@/components/molecules/LogBox";
 import type { Tile } from "@/components/organisms/Board";
 import type { Profile } from "@/components/organisms/ProfileList";
-import type { GameOptions } from "@/services/GameService/GameService.types";
+import type { GameControlOptions } from "@/components/organisms/GameControls/GameControls";
 
 interface MainTemplateProps {
   title: string;
   subtitle: string;
   tiles: Tile[];
-  gameOptions: GameOptions;
+  gameControlOptions: GameControlOptions;
   profiles: Profile[];
   logEvents: Event[];
   isConnected: boolean;
   onBoardTileClicked: (tileNo: number) => void;
-  onGameOptionsChanged: (newOptions: GameOptions) => void;
+  onGameControlOptionsChanged: (newOptions: GameControlOptions) => void;
   onLoadGameSetupClicked: () => void;
   onStartGameClicked: () => void;
   onConnectClicked: (uri: string) => void;
@@ -25,12 +25,12 @@ export default function MainTemplate({
   title,
   subtitle,
   tiles,
-  gameOptions,
+  gameControlOptions: gameOptions,
   profiles,
   logEvents,
   isConnected,
   onBoardTileClicked,
-  onGameOptionsChanged,
+  onGameControlOptionsChanged,
   onLoadGameSetupClicked,
   onStartGameClicked,
   onConnectClicked,
@@ -49,7 +49,7 @@ export default function MainTemplate({
       <div className="bg-polarNight-1 p-4 rounded-lg basis-96 flex flex-col gap-2">
         <GameControls
           options={gameOptions}
-          onChange={onGameOptionsChanged}
+          onChange={onGameControlOptionsChanged}
           onLoadGameSetup={onLoadGameSetupClicked}
           onStartGame={onStartGameClicked}
         />
