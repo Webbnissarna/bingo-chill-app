@@ -107,8 +107,8 @@ class MockDateTimeProvider implements DateTimeService {
     return end - start;
   }
 
-  advanceTime(): void {
-    this.advancedTime = this.advancedTime + 15;
+  advanceTime(secs?: number): void {
+    this.advancedTime = this.advancedTime + (secs ?? 15);
   }
 }
 
@@ -215,6 +215,23 @@ describe("GameEngine", () => {
     expect(round1CompletedTasks).toHaveLength(2);
     expect(round2CompletedTasks).toHaveLength(0);
     expect(round1tasks).not.toEqual(expect.arrayContaining(round2tasks));
+  });
+
+  it("reset startTimestamp on successive startGame calls", () => {
+    const dateTime = new MockDateTimeProvider();
+    const gameEngine = new GameEngine({
+      dateTime,
+      rng: new SeededRandom(),
+    });
+    gameEngine.loadSetup(MOCK_GAME);
+    gameEngine.startGame(BLANK_OPTIONS);
+
+    dateTime.advanceTime();
+    gameEngine.startGame(BLANK_OPTIONS);
+
+    expect(gameEngine.getGameState().startTimestamp).toBe(
+      "2023-06-01T12:00:15.000Z",
+    );
   });
 
   it("creates tasks", () => {
@@ -701,7 +718,7 @@ describe("GameEngine", () => {
       const result = gameEngine.getGameState().events[length];
 
       expect(result).toMatchObject<Event>({
-        elapsedTimeS: 15,
+        elapsedTimeS: 0,
         message: "Game Started!",
       });
     });
@@ -817,7 +834,53 @@ describe("GameEngine", () => {
     });
 
     it("adds event when time is up", () => {
-      expect(true).toBe(false); // TODO
+      jest.useFakeTimers();
+      const dateTime = new MockDateTimeProvider();
+      const gameEngine = new GameEngine({
+        dateTime,
+        rng: new SeededRandom(),
+      });
+      gameEngine.loadSetup(MOCK_GAME);
+      gameEngine.startGame({ ...BLANK_OPTIONS, timeLimitMinutes: 2 });
+
+      dateTime.advanceTime(119);
+      jest.advanceTimersByTime(119 * 1000);
+
+      const result0 = gameEngine.getGameState().events.at(-1);
+      dateTime.advanceTime(1);
+      jest.advanceTimersByTime(1 * 1000);
+      const result1 = gameEngine.getGameState().events.at(-1);
+      dateTime.advanceTime(1);
+      jest.advanceTimersByTime(1 * 1000);
+      const result2 = gameEngine.getGameState().events.at(-1);
+
+      expect(result0).not.toEqual(result1);
+      expect(result1).toMatchObject<Event>({
+        message: "Time Expired! Game Over!",
+        elapsedTimeS: 120,
+      });
+      expect(result2).toBe(result1);
+    });
+
+    it("does not add event for original time limit after restarting", () => {
+      jest.useFakeTimers();
+      const dateTime = new MockDateTimeProvider();
+      const gameEngine = new GameEngine({
+        dateTime,
+        rng: new SeededRandom(),
+      });
+      gameEngine.loadSetup(MOCK_GAME);
+      gameEngine.startGame({ ...BLANK_OPTIONS, timeLimitMinutes: 2 });
+
+      jest.advanceTimersByTime(119 * 1000);
+      gameEngine.startGame(BLANK_OPTIONS);
+      jest.advanceTimersByTime(1 * 1000);
+      const result = gameEngine.getGameState().events.at(-1);
+
+      expect(result).toMatchObject<Event>({
+        message: "Game Started!",
+        elapsedTimeS: 0,
+      });
     });
 
     it.each([

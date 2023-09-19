@@ -54,12 +54,14 @@ export default class GameEngine implements IGameEngine {
   private gameState: GameState;
   private changeHandler: GameStateChangedHandler | null;
   private playerCounter: number;
+  private timeExpiredHandler: NodeJS.Timeout | null;
 
   constructor(deps: GameEngineDependencies) {
     this.deps = deps;
     this.gameState = getBlankGameState();
     this.changeHandler = null;
     this.playerCounter = 0;
+    this.timeExpiredHandler = null;
 
     this.gameState.startTimestamp = this.deps.dateTime.toTimestamp(
       this.deps.dateTime.now(),
@@ -122,6 +124,24 @@ export default class GameEngine implements IGameEngine {
   private getRandomNiceColor(): string {
     return HSVtoHEX(this.deps.rng.randRangeInt(0, 359), 50, 100);
   }
+
+  private triggerTimeExpired(): void {
+    if (this.timeExpiredHandler) {
+      clearTimeout(this.timeExpiredHandler);
+      this.timeExpiredHandler = null;
+    }
+    this.addEvent("Time Expired! Game Over!");
+  }
+
+  /* private checkForTimeExpired() {
+    const start = this.deps.dateTime.parse(this.gameState.startTimestamp);
+    const now = this.deps.dateTime.now();
+    const seconds = this.deps.dateTime.secondsFrom(start, now);
+
+    if (seconds >= this.timeLimitSeconds) {
+      this.triggerTimeExpired();
+    }
+  } */
 
   /////////////////////////////////////////////////////////////////////////
   // IGameEngine interface
@@ -221,6 +241,22 @@ export default class GameEngine implements IGameEngine {
       ...p,
       completedTiles: [],
     }));
+
+    if (this.timeExpiredHandler) {
+      clearTimeout(this.timeExpiredHandler);
+      this.timeExpiredHandler = null;
+    }
+
+    if (options.timeLimitMinutes > 0) {
+      this.timeExpiredHandler = setTimeout(
+        this.triggerTimeExpired.bind(this),
+        options.timeLimitMinutes * 60 * 1000,
+      );
+    }
+
+    this.gameState.startTimestamp = this.deps.dateTime.toTimestamp(
+      this.deps.dateTime.now(),
+    );
 
     this.addEvent("Game Started!");
   }
