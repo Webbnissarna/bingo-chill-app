@@ -2,143 +2,134 @@ import {
   Heading,
   Subtitle,
   Text,
-  TextButton,
+  Button,
   TextInputField,
 } from "@/components/atoms";
-import TagsInput from "@/components/atoms/TagsInput/TagsInput";
-import type { DragEndEvent } from "@dnd-kit/core";
-import { DndContext } from "@dnd-kit/core";
-import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import TaskEditTable, { stripKey } from "@/components/organisms/TaskEditTable";
+import { FolderOpenFilled, SaveFilled, CopyFilled } from "@ant-design/icons";
+import type {
+  GameSetup,
+  Task,
+} from "@webbnissarna/bingo-chill-common/src/game/types";
 import {
-  SortableContext,
-  arrayMove,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { Table } from "antd";
-import { useState } from "react";
+  patch,
+  type DeepPartial,
+} from "@webbnissarna/bingo-chill-common/src/utils/functional";
+import { calculateChecksum } from "@webbnissarna/bingo-chill-common/src/game/utils";
+import { useContext } from "react";
+import { ServiceRegistryContext } from "@/services/ServiceRegistry/ServiceRegistryContext";
 
-export interface EditorTemplateProps {}
-
-interface ColumnData {
-  key: string;
-  icon: string;
-  name: string;
-  tags: string;
+export interface TaskWithPossibleKey extends Task {
+  key?: string;
+}
+export interface GameSetupWithKeys extends GameSetup {
+  tasks: TaskWithPossibleKey[];
 }
 
-interface RowProps {
-  id: string;
+export function stripTaskKeys(gameSetup: GameSetupWithKeys): GameSetup {
+  return {
+    ...gameSetup,
+    tasks: gameSetup.tasks.map(stripKey),
+  };
 }
 
-function Row({ id }: RowProps) {
-  const {} = useSortable({ id });
-
-  return (
-    <tr className="flex gap-2 items-center bg-polarNight-1 rounded-md p-1">
-      <div className="w-12 h-12 bg-polarNight-0 rounded-md"></div>
-      <div className="grow">
-        <TextInputField value="" onChange={() => undefined} />
-      </div>
-      <div className="grow">
-        <TagsInput
-          placeholder="tags"
-          values={[]}
-          options={[]}
-          onChange={() => undefined}
-        />
-      </div>
-      <TextButton onClick={() => undefined} text="x" />
-    </tr>
-  );
+export interface EditorTemplateProps {
+  gameSetup: GameSetup;
+  onChange: (newGameSetup: GameSetupWithKeys) => void;
+  onLoadClicked: () => void;
+  onSaveClicked: () => void;
+  onCopyClicked: () => void;
 }
 
-interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
-  "data-row-key": string;
-}
+export default function EditorTemplate({
+  gameSetup,
+  onChange,
+  onLoadClicked,
+  onSaveClicked,
+  onCopyClicked,
+}: EditorTemplateProps): JSX.Element {
+  const serviceRegistry = useContext(ServiceRegistryContext);
+  const dateTimeService = serviceRegistry.get("DateTime");
 
-export default function EditorTemplate({}: EditorTemplateProps): JSX.Element {
-  const [dataSource, setDataSource] = useState<{ key: string }[]>([]);
+  const patchWithTimestampAndChecksum = (
+    baseSetup: GameSetup,
+    update: DeepPartial<GameSetup>,
+  ): GameSetup => {
+    const timestamp = dateTimeService.toTimestamp(dateTimeService.now());
+    const setup = patch(baseSetup, {
+      ...update,
+      meta: { ...update.meta, timestamp },
+    });
+    const checksum = calculateChecksum(stripTaskKeys(setup));
+    return { ...setup, checksum };
+  };
 
-  const onDragEnd = ({ active, over }: DragEndEvent) => {
-    if (active.id !== over?.id) {
-      setDataSource((previous) => {
-        const activeIndex = previous.findIndex((i) => i.key === active.id);
-        const overIndex = previous.findIndex((i) => i.key === over?.id);
-        return arrayMove(previous, activeIndex, overIndex);
-      });
-    }
+  const triggerChange = (update: DeepPartial<GameSetup>) => {
+    onChange(patchWithTimestampAndChecksum(gameSetup, update));
   };
 
   return (
     <div className="bg-polarNight-0 w-screen h-full min-h-screen max-w-full max-h-full flex flex-row gap-4 justify-center md:p-2 md:py-14">
       <div className="bg-polarNight-1 w-full max-w-3xl p-2 flex flex-col items-center gap-2 md:rounded-2xl">
         <div className="flex flex-col items-center justify-center">
-          <Heading>Bingo Chillin'</Heading>
+          <Heading>Bingo Chillin&apos;</Heading>
           <Subtitle>Game Setup Editor</Subtitle>
         </div>
 
         <div className="flex gap-2">
-          <TextButton text="Load" onClick={() => undefined} />
-          <TextButton text="Save" onClick={() => undefined} />
-          <TextButton text="Copy" onClick={() => undefined} />
+          <Button onClick={onLoadClicked}>
+            <FolderOpenFilled /> Load
+          </Button>
+          <Button onClick={onSaveClicked}>
+            <SaveFilled /> Save
+          </Button>
+          <Button onClick={onCopyClicked}>
+            <CopyFilled /> Copy
+          </Button>
         </div>
 
-        <div className="grid grid-cols-[1fr_1fr] gap-2 w-full items-center">
-          <div className="flex items-center">
-            <div className="grow basis-36">
-              <Text>Timestamp</Text>
-            </div>
-            <div className="opacity-50">
-              <Text>2023-06-01</Text>
-            </div>
-          </div>
-
-          <div className="flex items-center">
-            <div className="grow basis-36">
-              <Text>Game Name</Text>
-            </div>
-            <TextInputField value="" onChange={() => undefined} />
-          </div>
-
-          <div className="flex items-center">
-            <div className="grow basis-36">
-              <Text>Version</Text>
-            </div>
-            <TextInputField value="" onChange={() => undefined} />
-          </div>
-
-          <div className="flex items-center">
-            <div className="grow basis-36">
-              <Text>Author</Text>
-            </div>
-            <TextInputField value="" onChange={() => undefined} />
-          </div>
-        </div>
-
-        <DndContext modifiers={[restrictToVerticalAxis]} onDragEnd={onDragEnd}>
-          <SortableContext
-            // rowKey array
-            items={dataSource.map(({ key }) => key)}
-            strategy={verticalListSortingStrategy}
-          >
-            <Table
-              components={{
-                body: {
-                  row: Row,
-                },
-              }}
-              rowKey="key"
-              columns={[
-                { key: "sort" },
-                { title: "Icon", dataIndex: "icon" },
-                { title: "Name", dataIndex: "name" },
-                { title: "Tags", dataIndex: "tags" },
-              ]}
-              dataSource={dataSource}
+        <div className="grid grid-cols-[100px_1fr] gap-2 w-full items-center">
+          <Text>Game Name</Text>
+          <div>
+            <TextInputField
+              value={gameSetup.name}
+              onChange={(newName) => triggerChange({ name: newName })}
             />
-          </SortableContext>
-        </DndContext>
+          </div>
+
+          <Text>Author</Text>
+          <div>
+            <TextInputField
+              value={gameSetup.meta.author}
+              onChange={(author) => triggerChange({ meta: { author } })}
+            />
+          </div>
+
+          <Text>Version</Text>
+          <div>
+            <TextInputField
+              value={gameSetup.meta.version}
+              onChange={(version) => triggerChange({ meta: { version } })}
+            />
+          </div>
+
+          <Text>Timestamp</Text>
+          <div className="opacity-50">
+            <Text>{gameSetup.meta.timestamp}</Text>
+          </div>
+
+          <Text>Checksum</Text>
+          <div className="opacity-50">
+            <Text>{gameSetup.checksum}</Text>
+          </div>
+        </div>
+
+        <div className="w-full">
+          <TaskEditTable
+            tasks={gameSetup.tasks}
+            onChanged={(tasks) => triggerChange({ tasks })}
+          />
+        </div>
       </div>
     </div>
   );

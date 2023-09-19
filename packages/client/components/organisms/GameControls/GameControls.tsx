@@ -1,6 +1,6 @@
 import IntegerInputField from "@/components/atoms/IntegerInputField/IntegerInputField";
 import Text from "@/components/atoms/Text";
-import TextButton from "@/components/atoms/TextButton";
+import Button from "@/components/atoms/Button";
 import TextInputField from "@/components/atoms/TextInputField";
 import Toggle from "@/components/atoms/Toggle";
 import { ServiceRegistryContext } from "@/services/ServiceRegistry/ServiceRegistryContext";
@@ -43,7 +43,7 @@ export default function GameControls({
 
   return (
     <div className="w-full flex flex-col gap-2 items-start">
-      <TextButton text="Load Game Setup" onClick={onLoadGameSetup} />
+      <Button onClick={onLoadGameSetup}>Load Game Setup</Button>
       <div className="grid grid-cols-[auto_auto] gap-2 w-full">
         <Text>Seed</Text>
         <div className="flex gap-2">
@@ -51,7 +51,7 @@ export default function GameControls({
             value={options.seed}
             onChange={(seed) => updateOptions({ seed })}
           />
-          <TextButton text="R" onClick={randomizeSeed} />
+          <Button onClick={randomizeSeed}>R</Button>
         </div>
 
         <Text>Tag Filter</Text>
@@ -69,7 +69,7 @@ export default function GameControls({
           onChange={(timeLimitMinutes) => updateOptions({ timeLimitMinutes })}
         />
       </div>
-      <TextButton text="Start Game" onClick={onStartGame} />
+      <Button onClick={onStartGame}>Start Game</Button>
     </div>
   );
 }

@@ -1,10 +1,10 @@
 import { render } from "../../../.jest/render";
-import TaskEditTable from ".";
+import Button from ".";
 
-describe("TaskEditTable", () => {
+describe("Button", () => {
   it("renders", () => {
     const { asFragment } = render(
-      <TaskEditTable tasks={[]} onTasksChanged={() => undefined} />,
+      <Button text="Hello World" onClick={() => undefined} />,
     );
 
     expect(asFragment()).toMatchSnapshot();

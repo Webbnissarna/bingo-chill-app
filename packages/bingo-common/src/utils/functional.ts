@@ -1,10 +1,16 @@
 import mergeWith from "lodash.mergewith";
 
+export type DeepPartial<T> = T extends object
+  ? {
+      [P in keyof T]?: DeepPartial<T[P]>;
+    }
+  : T;
+
 export function useIf<T>(condition: boolean, value: T): T | undefined {
   return condition ? value : undefined;
 }
 
-export function patch<T>(base: T, update: Partial<T>): T {
+export function patch<T>(base: T, update: DeepPartial<T>): T {
   return mergeWith(base, update, (baseValue, updateValue) => {
     if (Array.isArray(baseValue)) {
       return updateValue;
@@ -101,8 +107,4 @@ export function HSVtoHEX(h: number, s: number, v: number): string {
   const hexB = toHex(b);
 
   return `#${hexR}${hexG}${hexB}`;
-}
-
-export function makePatch<T>(base: T, changed: T): Partial<T> {
-  return base;
 }

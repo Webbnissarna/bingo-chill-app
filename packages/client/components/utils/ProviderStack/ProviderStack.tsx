@@ -18,6 +18,17 @@ export default function ProviderStack({
             colorPrimary: nordThemeColors.frost[3],
           },
           components: {
+            Upload: {
+              actionsColor: "#f00",
+              colorBgMask: "#ff0",
+              colorBorder: nordThemeColors.polarNight[3],
+              colorFillAlter: nordThemeColors.polarNight[0],
+              colorPrimary: nordThemeColors.frost[3],
+              colorPrimaryHover: "#a80",
+              colorText: nordThemeColors.snowStorm[2],
+              colorTextDescription: "#e09",
+              controlHeightLG: 25,
+            },
             Select: {
               clearBg: nordThemeColors.polarNight[3],
               multipleItemBg: nordThemeColors.polarNight[1],

@@ -1,6 +1,6 @@
 import Base64Icon from "@/components/atoms/Base64Icon";
 import { generateGradientCSS } from "@/utils/css";
-import { useIf } from "@/utils/functional";
+import { useIf } from "@webbnissarna/bingo-chill-common/src/utils/functional";
 
 interface TileProps {
   text: string;

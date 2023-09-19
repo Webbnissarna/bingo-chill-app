@@ -5,6 +5,6 @@ export { default as MarkdownText } from "./MarkdownText";
 export { default as Subtitle } from "./Subtitle";
 export { default as TagsInput } from "./TagsInput";
 export { default as Text } from "./Text";
-export { default as TextButton } from "./TextButton";
+export { default as Button } from "./Button";
 export { default as TextInputField } from "./TextInputField";
 export { default as Toggle } from "./Toggle";

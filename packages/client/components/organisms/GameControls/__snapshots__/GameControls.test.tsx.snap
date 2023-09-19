@@ -6,7 +6,7 @@ exports[`GameControls renders 1`] = `
     class="w-full flex flex-col gap-2 items-start"
   >
     <button
-      class="font-text font-base text-snowStorm-2 bg-polarNight-3 px-3 py-1 rounded-lg hover:bg-polarNight-2 active:bg-polarNight-1 transition"
+      class="font-text font-base text-snowStorm-2 px-3 py-1 rounded-lg transition flex gap-1 items-center justify-center bg-polarNight-3 hover:bg-frost-3 active:bg-frost-2"
     >
       Load Game Setup
     </button>
@@ -27,7 +27,7 @@ exports[`GameControls renders 1`] = `
           value="0"
         />
         <button
-          class="font-text font-base text-snowStorm-2 bg-polarNight-3 px-3 py-1 rounded-lg hover:bg-polarNight-2 active:bg-polarNight-1 transition"
+          class="font-text font-base text-snowStorm-2 px-3 py-1 rounded-lg transition flex gap-1 items-center justify-center bg-polarNight-3 hover:bg-frost-3 active:bg-frost-2"
         >
           R
         </button>
@@ -63,7 +63,7 @@ exports[`GameControls renders 1`] = `
       />
     </div>
     <button
-      class="font-text font-base text-snowStorm-2 bg-polarNight-3 px-3 py-1 rounded-lg hover:bg-polarNight-2 active:bg-polarNight-1 transition"
+      class="font-text font-base text-snowStorm-2 px-3 py-1 rounded-lg transition flex gap-1 items-center justify-center bg-polarNight-3 hover:bg-frost-3 active:bg-frost-2"
     >
       Start Game
     </button>

@@ -1,8 +1,13 @@
 import { Select } from "antd";
 
+export interface Tag {
+  label: string;
+  value: string;
+}
+
 export interface TagsInputProps {
   values: string[];
-  options: { label: string; value: string }[];
+  options: Tag[];
   placeholder: string;
   onChange: (values: string[]) => void;
 }
@@ -16,7 +21,7 @@ export default function TagsInput({
   return (
     <Select
       allowClear
-      mode="multiple"
+      mode="tags"
       options={options}
       placeholder={placeholder}
       className="w-full"

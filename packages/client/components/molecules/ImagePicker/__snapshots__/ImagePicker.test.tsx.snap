@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ImagePicker renders 1`] = `
+<DocumentFragment>
+  <div>
+    <span
+      class="ant-upload-wrapper avatar-uploader css-dev-only-do-not-override-18iikkb ant-upload-picture-circle-wrapper"
+    >
+      <div
+        class="ant-upload ant-upload-select"
+      >
+        <span
+          class="ant-upload"
+          role="button"
+          tabindex="0"
+        >
+          <input
+            accept=".jpg,.jpeg,.png"
+            style="display: none;"
+            type="file"
+          />
+          <div
+            class="font-text text-xs flex flex-col items-center justify-center text-snowStorm-0"
+          >
+            <span
+              aria-label="plus"
+              class="anticon anticon-plus"
+              role="img"
+            >
+              <svg
+                aria-hidden="true"
+                data-icon="plus"
+                fill="currentColor"
+                focusable="false"
+                height="1em"
+                viewBox="64 64 896 896"
+                width="1em"
+              >
+                <path
+                  d="M482 152h60q8 0 8 8v704q0 8-8 8h-60q-8 0-8-8V160q0-8 8-8z"
+                />
+                <path
+                  d="M192 474h672q8 0 8 8v60q0 8-8 8H160q-8 0-8-8v-60q0-8 8-8z"
+                />
+              </svg>
+            </span>
+            <span>
+              Upload
+            </span>
+          </div>
+        </span>
+      </div>
+    </span>
+  </div>
+</DocumentFragment>
+`;

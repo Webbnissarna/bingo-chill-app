@@ -4,7 +4,7 @@ exports[`Base64Icon renders 1`] = `
 <DocumentFragment>
   <img
     alt=""
-    src="data:image/png;base64,"
+    src=""
   />
 </DocumentFragment>
 `;

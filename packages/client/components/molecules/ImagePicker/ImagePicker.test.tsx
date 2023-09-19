@@ -1,9 +1,9 @@
 import { render } from "../../../.jest/render";
-import EditorTemplate from ".";
+import ImagePicker from ".";
 
-describe("EditorTemplate", () => {
+describe("ImagePicker", () => {
   it("renders", () => {
-    const { asFragment } = render(<EditorTemplate />);
+    const { asFragment } = render(<ImagePicker />);
 
     expect(asFragment()).toMatchSnapshot();
   });

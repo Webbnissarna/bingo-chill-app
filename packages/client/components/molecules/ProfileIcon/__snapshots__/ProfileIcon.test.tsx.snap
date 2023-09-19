@@ -10,7 +10,7 @@ exports[`ProfileIcon renders 1`] = `
     >
       <img
         alt="profile"
-        src="data:image/png;base64,"
+        src=""
       />
     </div>
     <div

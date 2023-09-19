@@ -1,4 +1,4 @@
-import { TextInputField, TextButton } from "@/components/atoms";
+import { TextInputField, Button } from "@/components/atoms";
 import { useState } from "react";
 
 interface ConnectionControlsProps {
@@ -15,10 +15,9 @@ export default function ConnectionControls({
   return (
     <div className="flex gap-2">
       <TextInputField value={uri} onChange={setUri} />
-      <TextButton
-        text={isConnected ? "Disconnect" : "Connect"}
-        onClick={() => onConnectClicked(uri)}
-      />
+      <Button onClick={() => onConnectClicked(uri)}>
+        {isConnected ? "Disconnect" : "Connect"}
+      </Button>
     </div>
   );
 }
