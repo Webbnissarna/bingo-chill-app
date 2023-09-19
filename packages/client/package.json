@@ -74,11 +74,6 @@
     "ts-node": "^10.9.1",
     "vite": "^4.4.9"
   },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-emoji-conventional"
-    }
-  },
   "engines": {
     "node": "19",
     "yarn": "1.22"

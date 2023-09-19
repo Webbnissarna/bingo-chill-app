@@ -12,5 +12,10 @@
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-emoji-conventional"
+    }
+  }
 }
