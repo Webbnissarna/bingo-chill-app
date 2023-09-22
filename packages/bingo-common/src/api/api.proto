@@ -8,7 +8,7 @@ message Player {
 }
 
 message Task {
-  int32 index = 1;
+  string name = 1;
   repeated string colors = 2;
 }
 
@@ -18,9 +18,10 @@ message Event {
 }
 
 message GameStateUpdate {
-  repeated Player players = 1;
-  repeated Task tasks = 2;
-  repeated Event events = 3;
+  string startTimestamp = 1;
+  repeated Player players = 2;
+  repeated Task tasks = 3;
+  repeated Event events = 4;
 }
 
 message TaskFilters {

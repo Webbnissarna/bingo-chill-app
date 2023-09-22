@@ -16,7 +16,7 @@ import { CSS } from "@dnd-kit/utilities";
 
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useId, useMemo, useState } from "react";
 import type { Task } from "@webbnissarna/bingo-chill-common/src/game/types";
 import { TagsInput, Button, TextInputField } from "@/components/atoms";
 import ImagePicker from "@/components/molecules/ImagePicker";
@@ -49,7 +49,7 @@ function Row({ children, ...props }: RowProps) {
     ...props.style,
     transform: CSS.Transform.toString(transform && { ...transform, scaleY: 1 }),
     transition,
-    ...(isDragging ? { position: "relative", zIndex: 9999 } : {}),
+    ...(isDragging ? { position: "relative", zIndex: 1337 } : {}),
   };
 
   return (
@@ -121,10 +121,12 @@ export default function TaskEditTable({
 
   const allTags = useMemo<Tag[]>(
     () =>
-      [...new Set(tasks.map((t) => t.tags).flat())].map((value) => ({
-        value,
-        label: value,
-      })),
+      [...new Set(tasks.map((t) => t.tags).flat())]
+        .map((value) => ({
+          value,
+          label: value,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label)),
     [tasks],
   );
 
@@ -177,9 +179,15 @@ export default function TaskEditTable({
     },
   ];
 
+  const dndId = useId();
+
   return (
     <div className="flex flex-col gap-2">
-      <DndContext modifiers={[restrictToVerticalAxis]} onDragEnd={onDragEnd}>
+      <DndContext
+        id={dndId}
+        modifiers={[restrictToVerticalAxis]}
+        onDragEnd={onDragEnd}
+      >
         <SortableContext
           items={dataSource.map((i) => i.key)}
           strategy={verticalListSortingStrategy}

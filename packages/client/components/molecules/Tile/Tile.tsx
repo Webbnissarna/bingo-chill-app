@@ -21,7 +21,7 @@ export default function Tile({
       style={useIf(hasColors, {
         background: generateGradientCSS(highlightColors),
       })}
-      className="max-w-[150px] max-h-[150px] aspect-square rounded-2xl bg-polarNight-3 flex flex-col items-center py-2 gap-1 cursor-pointer hover:bg-polarNight-2 active:bg-polarNight-1 hover:opacity-90 active:opacity-80 transition select-none"
+      className="max-w-[120px] max-h-[120px] aspect-square rounded-2xl bg-polarNight-3 flex flex-col items-center py-1 gap-1 cursor-pointer hover:bg-polarNight-2 active:bg-polarNight-1 hover:opacity-90 active:opacity-80 transition select-none"
       onClick={onClick}
     >
       <div className="grow h-2/3">
@@ -30,7 +30,7 @@ export default function Tile({
             className={`${useIf(
               hasColors,
               "bg-polarNight-0/75",
-            )} font-text text-snowStorm-2 text-xs sm:text-sm md:text-base lg:text-lg leading-snug inline-block w-full max-h-full rounded px-2 py-1`}
+            )} font-text text-snowStorm-2 text-xs sm:text-base leading-snug inline-block w-full max-h-full rounded px-2 py-1`}
           >
             {text}
           </span>

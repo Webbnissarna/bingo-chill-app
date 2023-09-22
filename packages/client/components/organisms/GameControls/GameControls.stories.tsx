@@ -1,24 +1,34 @@
 import { useState } from "react";
 import GameControls from ".";
-import type { GameOptions } from "@/services/GameServiceDEPRECATED/GameService.types";
 import type { StoryDefault } from "@ladle/react";
+import type { SessionOptions } from "@webbnissarna/bingo-chill-common/src/game/types";
 
 export function Default() {
-  const [options, setOptions] = useState<GameOptions>({
+  const [options, setOptions] = useState<SessionOptions>({
     seed: 1337,
-    lockout: false,
-    tags: [],
+    isLockout: false,
+    taskFilters: {
+      includedTags: [],
+      excludedTags: [],
+    },
     timeLimitMinutes: 0,
   });
 
   return (
-    <div className="bg-polarNight-1 p-5">
+    <div className="bg-polarNight-1 p-5 flex flex-col gap-3">
       <GameControls
         options={options}
-        onChange={setOptions}
-        onLoadGameSetup={() => alert("Load Game Setup clicked!")}
-        onStartGame={() => alert("Start Game clicked!")}
+        onChange={(v) => setOptions({ ...v })}
+        allTags={["A", "B", "C", "D", "E", "F", "G"].map((value) => ({
+          value,
+          label: value,
+        }))}
       />
+      <div className="bg-polarNight-0 p-2 overflow-x-scroll">
+        <pre className="font-monospace text-snowStorm-0">
+          {JSON.stringify(options, null, 2)}
+        </pre>
+      </div>
     </div>
   );
 }

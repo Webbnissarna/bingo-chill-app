@@ -28,12 +28,16 @@ the client (NextJs web app), and a few shared resources.
 
 ## Overview
 
-Disclaimer: This app is not intended to be run as a public SaaS.
+Disclaimer: This app is not intended to be run as a public SaaS. It is more
+designed towards being used as a tool together with friends that play fair
+and relies a lot on an honor system.
+
 There is no server-authority or administration for a game session. This means
 that any player can (re)start a game (which will regenerate the board and reset
 progress), and that any player can claim to have completed any task. There
-also isn't any filtering for inappropriate names or icons. It is assumed that
-all players are friends and play fair.
+also isn't any filtering for inappropriate names or icons. The Game Engine is
+also relatively lean and does not for example prevent players from still playing
+after the set time limit has run out.
 
 ### Game Setup
 

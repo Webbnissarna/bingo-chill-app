@@ -23,7 +23,7 @@ export interface TaskFilters {
 }
 
 export interface SessionOptions {
-  checksum: number;
+  /* checksum: string; */
   seed: number;
   taskFilters: TaskFilters;
   isLockout: boolean;

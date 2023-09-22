@@ -74,13 +74,13 @@ exports[`TaskEditTable renders 1`] = `
                     class="ant-table-tbody"
                   >
                     <tr
-                      aria-describedby="DndDescribedBy-0"
+                      aria-describedby=":r0:"
                       aria-disabled="false"
                       aria-pressed="true"
                       aria-roledescription="sortable"
                       class="ant-table-placeholder"
                       role="button"
-                      style="position: relative; z-index: 9999; transition: transform 0ms linear;"
+                      style="position: relative; z-index: 1337; transition: transform 0ms linear;"
                       tabindex="0"
                     >
                       <td
@@ -143,7 +143,7 @@ exports[`TaskEditTable renders 1`] = `
       </div>
     </div>
     <div
-      id="DndDescribedBy-0"
+      id=":r0:"
       style="display: none;"
     >
       

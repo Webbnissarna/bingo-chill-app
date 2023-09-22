@@ -1,3 +1,4 @@
+import { ProviderStack } from "@/components/utils";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Raleway, Source_Sans_3, Fira_Code } from "next/font/google";
@@ -35,7 +36,7 @@ export default function RootLayout({
       <body
         className={`${raleway.variable} ${sourceSans.variable} ${firaCode.variable}`}
       >
-        {children}
+        <ProviderStack>{children}</ProviderStack>
       </body>
     </html>
   );

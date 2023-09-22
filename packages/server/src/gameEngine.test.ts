@@ -81,7 +81,6 @@ const MOCK_GAME: GameSetup = {
 };
 
 const BLANK_OPTIONS: SessionOptions = {
-  checksum: 0,
   seed: 0,
   isLockout: false,
   taskFilters: { includedTags: [], excludedTags: [] },

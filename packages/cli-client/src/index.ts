@@ -8,13 +8,18 @@ import type {
   ApiMessageEnvelope,
   GameStateUpdate,
 } from "@webbnissarna/bingo-chill-common/src/api/types";
-import type { SessionOptions } from "@webbnissarna/bingo-chill-common/src/game/types";
+import type {
+  GameSetup,
+  SessionOptions,
+} from "@webbnissarna/bingo-chill-common/src/game/types";
 import { patch } from "@webbnissarna/bingo-chill-common/src/utils/functional";
 import { hydrateOptions } from "@webbnissarna/bingo-chill-common/src/api/apiGameAdapter";
+import fs from "fs/promises";
 
 const state: {
   myId: string | null;
   options: SessionOptions | null;
+  setup: GameSetup | null;
   gameState: GameStateUpdate | null;
   refreshTriggerStack: string[];
   sentData: number;
@@ -22,6 +27,7 @@ const state: {
 } = {
   myId: null,
   options: null,
+  setup: null,
   gameState: null,
   refreshTriggerStack: [],
   sentData: 0,
@@ -73,6 +79,11 @@ function refreshScreen(triggerEvent: string) {
     ),
   );
   console.log(
+    `${chalk.gray("start timestamp:")} ${chalk.white(
+      state.gameState?.startTimestamp,
+    )}`,
+  );
+  console.log(
     chalk.gray(
       `players:\n\t${state.gameState?.players
         ?.map(
@@ -89,12 +100,12 @@ function refreshScreen(triggerEvent: string) {
       `tasks: ${state.gameState?.tasks
         ?.map((t) =>
           chalk.white(
-            `${t.index}:${
+            `${t.name}:${
               t.colors ? t.colors.map((c) => chalk.hex(c)("X")).join("") : ""
             }`,
           ),
         )
-        .join(" ")}`,
+        .join("\n\t")}`,
     ),
   );
   console.log(
@@ -231,6 +242,15 @@ async function run() {
         state.sentData = state.sentData + data.byteLength;
         ws.send(data);
         refreshScreen(chalk.blue(type));
+        break;
+      }
+
+      case "load": {
+        fs.readFile(payload, { encoding: "utf-8" })
+          .then((raw) => JSON.parse(raw) as GameSetup)
+          .then((setup) => (state.setup = setup))
+          .then(() => refreshScreen("loaded setup"))
+          .catch((err) => refreshScreen(chalk.red(`load fail: ${err}`)));
         break;
       }
       default:

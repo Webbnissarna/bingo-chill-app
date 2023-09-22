@@ -16,7 +16,7 @@ export default function Board({
   onTileClicked,
 }: BoardProps): JSX.Element {
   return (
-    <div className="grid grid-cols-5 grid-rows-5 gap-2 w-full max-w-3xl">
+    <div className="grid grid-cols-5 grid-rows-5 gap-2 w-fit">
       {tiles.map((tile, index) => (
         <div key={tile.text} className="aspect-square">
           <Tile

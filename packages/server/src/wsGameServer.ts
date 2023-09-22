@@ -39,7 +39,6 @@ export default class WsGameServer {
     this.playerSocketMap = {};
     this.gameEngine = gameEngine;
     this.sessionOptions = {
-      checksum: -1,
       isLockout: false,
       seed: 0,
       taskFilters: {

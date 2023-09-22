@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode } from "react";
 import React, { createContext, useEffect, useState } from "react";
 import type { ServiceRegistry } from "./ServiceRegistry.types";

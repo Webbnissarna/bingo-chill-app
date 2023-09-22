@@ -6,10 +6,17 @@ describe("GameControls", () => {
     const noop = () => undefined;
     const { asFragment } = render(
       <GameControls
-        options={{ seed: 0, isLockout: false, timeLimitMinutes: 0 }}
+        options={{
+          seed: 1337,
+          isLockout: false,
+          taskFilters: {
+            includedTags: [],
+            excludedTags: [],
+          },
+          timeLimitMinutes: 0,
+        }}
+        allTags={[]}
         onChange={noop}
-        onLoadGameSetup={noop}
-        onStartGame={noop}
       />,
     );
 

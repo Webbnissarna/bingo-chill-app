@@ -1,3 +1,5 @@
+"use client";
+
 import DefaultServiceRegistryProvider from "@/services/ServiceRegistry/ServiceRegistryContext";
 import { nordThemeColors } from "@webbnissarna/bingo-chill-common/src/utils/theme";
 import { ConfigProvider } from "antd";

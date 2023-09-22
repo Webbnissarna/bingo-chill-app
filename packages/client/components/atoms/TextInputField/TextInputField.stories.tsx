@@ -7,6 +7,7 @@ export function Default() {
   return (
     <div className="bg-polarNight-1 p-5">
       <TextInputField value={value} onChange={setValue} />
+      <span>{value}</span>
     </div>
   );
 }

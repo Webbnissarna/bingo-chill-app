@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Heading,
   Subtitle,
@@ -6,7 +8,12 @@ import {
   TextInputField,
 } from "@/components/atoms";
 import TaskEditTable, { stripKey } from "@/components/organisms/TaskEditTable";
-import { FolderOpenFilled, SaveFilled, CopyFilled } from "@ant-design/icons";
+import {
+  FolderOpenFilled,
+  SaveFilled,
+  CopyFilled,
+  HomeOutlined,
+} from "@ant-design/icons";
 import type {
   GameSetup,
   Task,
@@ -18,6 +25,7 @@ import {
 import { calculateChecksum } from "@webbnissarna/bingo-chill-common/src/game/utils";
 import { useContext } from "react";
 import { ServiceRegistryContext } from "@/services/ServiceRegistry/ServiceRegistryContext";
+import Link from "next/link";
 
 export interface TaskWithPossibleKey extends Task {
   key?: string;
@@ -49,12 +57,12 @@ export default function EditorTemplate({
   onCopyClicked,
 }: EditorTemplateProps): JSX.Element {
   const serviceRegistry = useContext(ServiceRegistryContext);
-  const dateTimeService = serviceRegistry.get("DateTime");
 
   const patchWithTimestampAndChecksum = (
     baseSetup: GameSetup,
     update: DeepPartial<GameSetup>,
   ): GameSetup => {
+    const dateTimeService = serviceRegistry.get("DateTime");
     const timestamp = dateTimeService.toTimestamp(dateTimeService.now());
     const setup = patch(baseSetup, {
       ...update,
@@ -69,7 +77,13 @@ export default function EditorTemplate({
   };
 
   return (
-    <div className="bg-polarNight-0 w-screen h-full min-h-screen max-w-full max-h-full flex flex-row gap-4 justify-center md:p-2 md:py-14">
+    <div className="font-text bg-polarNight-0 w-screen h-full min-h-screen max-w-full max-h-full flex flex-col gap-4 items-center md:p-2 md:py-14">
+      <Button onClick={() => undefined}>
+        <Link href={"."}>
+          <HomeOutlined />
+          Home
+        </Link>
+      </Button>
       <div className="bg-polarNight-1 w-full max-w-3xl p-2 flex flex-col items-center gap-2 md:rounded-2xl">
         <div className="flex flex-col items-center justify-center">
           <Heading>Bingo Chillin&apos;</Heading>
@@ -122,6 +136,10 @@ export default function EditorTemplate({
           <div className="opacity-50">
             <Text>{gameSetup.checksum}</Text>
           </div>
+        </div>
+
+        <div className="w-full opacity-50 text-center text-sm">
+          <span>{gameSetup.tasks.length} tasks</span>
         </div>
 
         <div className="w-full">

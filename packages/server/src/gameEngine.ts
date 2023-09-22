@@ -133,16 +133,6 @@ export default class GameEngine implements IGameEngine {
     this.addEvent("Time Expired! Game Over!");
   }
 
-  /* private checkForTimeExpired() {
-    const start = this.deps.dateTime.parse(this.gameState.startTimestamp);
-    const now = this.deps.dateTime.now();
-    const seconds = this.deps.dateTime.secondsFrom(start, now);
-
-    if (seconds >= this.timeLimitSeconds) {
-      this.triggerTimeExpired();
-    }
-  } */
-
   /////////////////////////////////////////////////////////////////////////
   // IGameEngine interface
   /////////////////////////////////////////////////////////////////////////

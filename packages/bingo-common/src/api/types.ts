@@ -9,7 +9,7 @@ import type {
 export type SessionOptionsUpdate = SessionOptions;
 
 export interface Task {
-  index: number;
+  name: string;
   colors: string[];
 }
 
@@ -18,6 +18,7 @@ export interface Player extends Profile {
 }
 
 export interface GameStateUpdate {
+  startTimestamp?: string;
   players?: Player[];
   tasks?: Task[];
   events?: Event[];

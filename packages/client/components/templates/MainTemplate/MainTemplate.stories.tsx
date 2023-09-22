@@ -2,20 +2,22 @@ import type { StoryDefault } from "@ladle/react";
 import MainTemplate from ".";
 import { SPOOKY_GHOST_IMAGE_BASE64 } from "@/.ladle/constants";
 import { useState } from "react";
-import type { GameOptions } from "@/services/GameServiceDEPRECATED/GameService.types";
+import type { SessionOptions } from "@webbnissarna/bingo-chill-common/src/game/types";
 
 export function Default() {
-  const [options, setOptions] = useState<GameOptions>({
+  const [options, setOptions] = useState<SessionOptions>({
     seed: 1337,
-    lockout: false,
-    tags: [],
+    isLockout: false,
+    taskFilters: {
+      includedTags: [],
+      excludedTags: [],
+    },
     timeLimitMinutes: 0,
   });
 
   return (
     <MainTemplate
-      title="Bingo Chillin"
-      subtitle="Game Name Here"
+      title="Bingo Chillin'"
       tiles={Array(25)
         .fill(0)
         .map((_, i) => ({
@@ -23,7 +25,6 @@ export function Default() {
           icon: SPOOKY_GHOST_IMAGE_BASE64,
           colors: [],
         }))}
-      gameControlOptions={options}
       profiles={Array(4)
         .fill(0)
         .map((_, i) => ({
@@ -40,12 +41,14 @@ export function Default() {
         }))}
       isConnected={false}
       onBoardTileClicked={(tileNo) => alert(`Tile ${tileNo} clicked`)}
-      onGameOptionsChanged={setOptions}
       onLoadGameSetupClicked={() => alert("Load Game Setup clicked")}
       onStartGameClicked={() => alert("Start Game clicked")}
       onConnectClicked={(uri) =>
         alert(`Connect/Disconnect clicked, uri: ${uri}`)
       }
+      gameSetup={undefined}
+      sessionOptions={options}
+      onSessionOptionsChanged={(o) => setOptions({ ...o })}
     />
   );
 }

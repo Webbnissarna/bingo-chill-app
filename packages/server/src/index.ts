@@ -1,12 +1,12 @@
 import DayjsDateTime from "@webbnissarna/bingo-chill-common/src/dateTime/dayjsDateTime";
 import ProtobufSerializer from "@webbnissarna/bingo-chill-common/src/serialization/protobufSerializer";
 import dotenv from "dotenv";
-import SeedRandomRandomnessService from "./RandomnessService/seedrandomRandomnessService";
 import GameEngine from "./gameEngine";
 import WsGameServer from "./wsGameServer";
 import { getApiProtoFileContents } from "@webbnissarna/bingo-chill-common/src/serialization/protobufUtils";
 import yargs from "yargs";
 import fs from "fs/promises";
+import SeededRandom from "@webbnissarna/bingo-chill-common/src/random/SeededRandom";
 
 dotenv.config();
 
@@ -29,7 +29,7 @@ void (async () => {
 
   const gameEngine = new GameEngine({
     dateTime: new DayjsDateTime(),
-    rng: new SeedRandomRandomnessService(),
+    rng: new SeededRandom(),
   });
   gameEngine.loadSetup(JSON.parse(gameSetupContents));
 
