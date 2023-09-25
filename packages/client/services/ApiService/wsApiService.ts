@@ -8,6 +8,7 @@ import type {
 import type { DeepPartial } from "@webbnissarna/bingo-chill-common/src/utils/functional";
 import { patch } from "@webbnissarna/bingo-chill-common/src/utils/functional";
 import { hydrateOptions } from "@webbnissarna/bingo-chill-common/src/api/apiGameAdapter";
+import type { ApiMessageEnvelope } from "@webbnissarna/bingo-chill-common/src/api/types";
 
 export interface WsApiServiceDeps {
   serializer: Serializer;
@@ -17,10 +18,12 @@ export default class WsApiService implements IApiService {
   private deps: WsApiServiceDeps;
   private apiState: ApiState;
   private ws: WebSocket | null = null;
+  private onApiStateUpdate: ApiStateUpdateDelegate | null = null;
 
   constructor(deps: WsApiServiceDeps) {
     this.deps = deps;
     this.apiState = {
+      status: "disconnected",
       connectionId: "",
       options: {
         seed: 0,
@@ -47,6 +50,7 @@ export default class WsApiService implements IApiService {
 
   private updateApiState(update: DeepPartial<ApiState>) {
     this.apiState = patch(this.apiState, update);
+    this.onApiStateUpdate?.(this.apiState);
   }
 
   /////////////////////////////////////////////////////////////////
@@ -61,15 +65,18 @@ export default class WsApiService implements IApiService {
   private handleSocketError(ev: Event) {
     this.logError("socket error", ev);
     this.ws = null;
+    this.updateApiState({ status: "disconnected" });
   }
 
   private handleSocketClose(ev: CloseEvent) {
     this.logMessage("socket closed", ev);
     this.ws = null;
+    this.updateApiState({ status: "disconnected" });
   }
 
   private handlePostConnection() {
     if (!this.ws) return;
+    this.updateApiState({ status: "connected" });
   }
 
   private handleMessage(ev: MessageEvent) {
@@ -98,11 +105,19 @@ export default class WsApiService implements IApiService {
     }
   }
 
+  private sendMessage(envelope: ApiMessageEnvelope) {
+    if (!this.ws) return;
+
+    const data = this.deps.serializer.serialize(envelope);
+    this.ws.send(data);
+  }
+
   /////////////////////////////////////////////////////////////////
   // IApiService
   /////////////////////////////////////////////////////////////////
   connect(uri: string) {
     this.logMessage(`Connecting to '${uri}'`);
+    this.updateApiState({ status: "connecting" });
     this.ws = new WebSocket(uri);
     this.ws.onopen = this.handlePostConnection;
     this.ws.onerror = this.handleSocketError;
@@ -115,27 +130,34 @@ export default class WsApiService implements IApiService {
     this.ws.close();
   }
 
+  getApiState(): ApiState {
+    return this.apiState;
+  }
+
   addStateUpdateListener(delegate: ApiStateUpdateDelegate): void {
-    throw new Error("Method not implemented.");
+    this.onApiStateUpdate = delegate;
   }
 
   updateProfile(update: Partial<Profile>): void {
-    throw new Error("Method not implemented.");
+    // TODO: pre-update local state (prediction)
+    this.sendMessage({ type: "cUpdateProfile", profile: update });
   }
 
   updateOptions(update: SessionOptions): void {
-    throw new Error("Method not implemented.");
+    // TODO: pre-update local state (prediction)
+    this.sendMessage({ type: "cUpdateOptions", options: update });
   }
 
   updateTask(update: TaskUpdate): void {
-    throw new Error("Method not implemented.");
+    // TODO: pre-update local state (prediction)
+    this.sendMessage({ type: "cUpdateTask", task: update });
   }
 
   requestStart(): void {
-    throw new Error("Method not implemented.");
+    this.sendMessage({ type: "cRequestStart" });
   }
 
   requestFullState(): void {
-    throw new Error("Method not implemented.");
+    this.sendMessage({ type: "cRequestFullState" });
   }
 }

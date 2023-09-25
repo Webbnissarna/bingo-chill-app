@@ -80,8 +80,7 @@ export default function EditorTemplate({
     <div className="font-text bg-polarNight-0 w-screen h-full min-h-screen max-w-full max-h-full flex flex-col gap-4 items-center md:p-2 md:py-14">
       <Button onClick={() => undefined}>
         <Link href={"."}>
-          <HomeOutlined />
-          Home
+          <HomeOutlined /> Home
         </Link>
       </Button>
       <div className="bg-polarNight-1 w-full max-w-3xl p-2 flex flex-col items-center gap-2 md:rounded-2xl">

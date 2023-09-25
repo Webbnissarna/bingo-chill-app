@@ -1,9 +1,11 @@
+import type { IApiService } from "../ApiService/types";
 import type { RandomnessService } from "../RandomnessService/RandomnessService.types";
 import type { DateTimeService } from "@webbnissarna/bingo-chill-common/src/dateTime/types";
 
 export interface Services {
   Randomness: RandomnessService;
   DateTime: DateTimeService;
+  ApiService: IApiService;
 }
 
 export interface ServiceRegistry {

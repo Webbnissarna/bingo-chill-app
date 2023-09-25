@@ -2,17 +2,20 @@
 
 import type { Tile } from "@/components/organisms/Board";
 import { MainTemplate } from "@/components/templates";
+import { ServiceRegistryContext } from "@/services/ServiceRegistry/ServiceRegistryContext";
 import { loadFileUTF8ContentFromPicker } from "@/utils/file";
 import type {
   GameSetup,
   SessionOptions,
 } from "@webbnissarna/bingo-chill-common/src/game/types";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 export default function Home() {
   /////////////////////////////////////////////////////////////////
   // API
   /////////////////////////////////////////////////////////////////
+  const serviceRegistry = useContext(ServiceRegistryContext);
+  const apiService = serviceRegistry.get("ApiService");
 
   /////////////////////////////////////////////////////////////////
   // Game Setup + Tiles

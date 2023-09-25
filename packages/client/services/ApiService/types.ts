@@ -9,6 +9,7 @@ import type {
 } from "@webbnissarna/bingo-chill-common/src/game/types";
 
 export interface ApiState {
+  status: "disconnected" | "connecting" | "connected";
   connectionId: string;
   options: SessionOptions;
   gameState: Required<GameStateUpdate>;
@@ -27,5 +28,6 @@ export type ApiStateUpdateDelegate = (apiState: ApiState) => void;
 export interface IApiService extends ApiActions {
   connect(uri: string): void;
   disconnect(): void;
+  getApiState(): ApiState;
   addStateUpdateListener(delegate: ApiStateUpdateDelegate): void;
 }

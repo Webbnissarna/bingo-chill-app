@@ -6,6 +6,8 @@ import type { ServiceRegistry } from "./ServiceRegistry.types";
 import DefaultServiceRegistry from "./defaultServiceRegistry";
 import SeedRandomRandomnessService from "../RandomnessService/seedrandomRandomnessService";
 import DayjsDateTime from "@webbnissarna/bingo-chill-common/src/dateTime/dayjsDateTime";
+import WsApiService from "../ApiService/wsApiService";
+import ProtobufSerializer from "@webbnissarna/bingo-chill-common/src/serialization/protobufSerializer";
 
 export const ServiceRegistryContext = createContext<ServiceRegistry>({
   get() {
@@ -33,6 +35,10 @@ export default function DefaultServiceRegistryProvider({
       // Init concrete implementations of services here
       serviceRegistry.register("DateTime", new DayjsDateTime());
       serviceRegistry.register("Randomness", new SeedRandomRandomnessService());
+      serviceRegistry.register(
+        "ApiService",
+        new WsApiService({ serializer: new ProtobufSerializer() }),
+      );
 
       setHasInitialized(true);
     }
