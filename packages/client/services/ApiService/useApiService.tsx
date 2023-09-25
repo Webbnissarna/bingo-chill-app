@@ -3,6 +3,7 @@ import type { ApiState, IApiService } from "./types";
 
 export interface useApiServiceHook {
   apiState: ApiState;
+  apiService: IApiService;
 }
 
 export default function useApiService(
@@ -10,9 +11,12 @@ export default function useApiService(
 ): useApiServiceHook {
   const [apiState, setApiState] = useState<ApiState>(apiService.getApiState());
 
-  apiService.addStateUpdateListener(setApiState);
+  apiService.addStateUpdateListener((newState) => {
+    setApiState({ ...newState });
+  });
 
   return {
     apiState,
+    apiService,
   };
 }

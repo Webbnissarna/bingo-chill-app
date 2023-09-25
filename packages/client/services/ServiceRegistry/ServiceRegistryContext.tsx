@@ -22,27 +22,39 @@ interface DefaultServiceRegistryProviderProps {
   children: ReactNode;
 }
 
+async function getApiProtoFileContents(): Promise<string> {
+  const res = await fetch("/api.proto");
+  return res.text();
+}
+
+async function getDefaultServiceRegistry(): Promise<ServiceRegistry> {
+  const registry = new DefaultServiceRegistry();
+  registry.register("DateTime", new DayjsDateTime());
+  registry.register("Randomness", new SeedRandomRandomnessService());
+
+  const serializer = new ProtobufSerializer();
+  serializer.load(await getApiProtoFileContents());
+  registry.register("ApiService", new WsApiService({ serializer }));
+  return registry;
+}
+
 export default function DefaultServiceRegistryProvider({
   children,
 }: DefaultServiceRegistryProviderProps): JSX.Element {
-  const [serviceRegistry] = useState<ServiceRegistry>(
-    new DefaultServiceRegistry(),
-  );
-  const [hasInitialized, setHasInitialized] = useState(false);
+  const [serviceRegistry, setServiceRegistry] =
+    useState<ServiceRegistry | null>(null);
 
   useEffect(() => {
-    if (!hasInitialized) {
-      // Init concrete implementations of services here
-      serviceRegistry.register("DateTime", new DayjsDateTime());
-      serviceRegistry.register("Randomness", new SeedRandomRandomnessService());
-      serviceRegistry.register(
-        "ApiService",
-        new WsApiService({ serializer: new ProtobufSerializer() }),
-      );
+    void (async () => {
+      if (serviceRegistry === null) {
+        setServiceRegistry(await getDefaultServiceRegistry());
+      }
+    })();
+  });
 
-      setHasInitialized(true);
-    }
-  }, [hasInitialized, serviceRegistry]);
+  if (serviceRegistry === null) {
+    return <span>loading...</span>;
+  }
 
   return (
     <ServiceRegistryContext.Provider value={serviceRegistry}>

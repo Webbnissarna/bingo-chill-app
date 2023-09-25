@@ -2,14 +2,14 @@ import type { Story, StoryDefault } from "@ladle/react";
 import ConnectionControls from ".";
 
 interface StoryProps {
-  isConnected: boolean;
+  state: "connected" | "disconnected" | "connecting";
 }
 
-function StoryComponent({ isConnected }: StoryProps) {
+function StoryComponent({ state }: StoryProps) {
   return (
     <div className="bg-polarNight-1 p-5">
       <ConnectionControls
-        isConnected={isConnected}
+        state={state}
         onConnectClicked={(uri) => alert(`Clicked! uri=${uri}`)}
       />
     </div>
@@ -19,12 +19,15 @@ function StoryComponent({ isConnected }: StoryProps) {
 export const Default: Story<StoryProps> = StoryComponent;
 
 Default.args = {
-  isConnected: false,
+  state: "disconnected",
 };
 
 Default.argTypes = {
-  isConnected: {
-    control: { type: "boolean" },
+  state: {
+    control: {
+      type: "select",
+    },
+    options: ["connected", "connecting", "disconnected"],
   },
 };
 

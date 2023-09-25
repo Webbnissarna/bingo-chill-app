@@ -1,6 +1,10 @@
 import fs from "fs/promises";
 import path from "path";
 
+function getApiProtoFilePath(): string {
+  return path.join(__dirname, "../api/api.proto");
+}
+
 export function getApiProtoFileContents(): Promise<string> {
-  return fs.readFile(path.join(__dirname, "../api/api.proto"), "utf-8");
+  return fs.readFile(getApiProtoFilePath(), "utf-8");
 }

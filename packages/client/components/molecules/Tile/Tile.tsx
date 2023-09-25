@@ -37,7 +37,7 @@ export default function Tile({
         </div>
       </div>
       <div className="w-1/3 h-1/3">
-        <Base64Icon src={icon} description={text} />
+        <Base64Icon src={icon} />
       </div>
     </div>
   );

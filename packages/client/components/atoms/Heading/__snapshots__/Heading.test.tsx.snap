@@ -2,10 +2,10 @@
 
 exports[`Heading renders 1`] = `
 <DocumentFragment>
-  <h1
-    class="font-heading text-snowStorm-2 text-5xl"
+  <div
+    class="flex flex-col text-snowStorm-0 text-[6px] font-monospace"
   >
-    Hello World
-  </h1>
+    <pre />
+  </div>
 </DocumentFragment>
 `;

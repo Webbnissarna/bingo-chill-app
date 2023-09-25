@@ -10,6 +10,7 @@ exports[`ProfileIcon renders 1`] = `
     >
       <img
         alt="profile"
+        class="w-full h-full object-contain"
         src=""
       />
     </div>

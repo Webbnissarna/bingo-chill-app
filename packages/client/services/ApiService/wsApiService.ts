@@ -7,7 +7,10 @@ import type {
 } from "@webbnissarna/bingo-chill-common/src/game/types";
 import type { DeepPartial } from "@webbnissarna/bingo-chill-common/src/utils/functional";
 import { patch } from "@webbnissarna/bingo-chill-common/src/utils/functional";
-import { hydrateOptions } from "@webbnissarna/bingo-chill-common/src/api/apiGameAdapter";
+import {
+  hydrateGameStateUpdate,
+  hydrateOptions,
+} from "@webbnissarna/bingo-chill-common/src/api/apiGameAdapter";
 import type { ApiMessageEnvelope } from "@webbnissarna/bingo-chill-common/src/api/types";
 
 export interface WsApiServiceDeps {
@@ -25,6 +28,7 @@ export default class WsApiService implements IApiService {
     this.apiState = {
       status: "disconnected",
       connectionId: "",
+      logEvents: [],
       options: {
         seed: 0,
         isLockout: false,
@@ -40,12 +44,25 @@ export default class WsApiService implements IApiService {
     };
   }
 
+  private addLogEventToState(message: string) {
+    const logEvents = [...this.apiState.logEvents, { message }];
+    this.updateApiState({ logEvents });
+  }
+
   private logMessage(message: string, ...params: unknown[]) {
-    console.log(message, params);
+    const formattedMessage = `[ws-api] ${message}`;
+    console.log(formattedMessage, params);
+    this.addLogEventToState(
+      `<span className="text-snowStorm-0">${formattedMessage}</span>`,
+    );
   }
 
   private logError(message: string, ...params: unknown[]) {
-    console.error(message, params);
+    const formattedMessage = `[ws-api] ${message}`;
+    console.error(formattedMessage, params);
+    this.addLogEventToState(
+      `<span className="text-aurora-0">${formattedMessage}</span>`,
+    );
   }
 
   private updateApiState(update: DeepPartial<ApiState>) {
@@ -57,8 +74,9 @@ export default class WsApiService implements IApiService {
   // Socket management
   /////////////////////////////////////////////////////////////////
   private explicitlyCloseSocket(reason: string, ...params: unknown[]) {
-    if (!this.ws) return;
     this.logError(reason, params);
+    this.updateApiState({ status: "disconnected" });
+    if (!this.ws) return;
     this.ws.close(1008, reason);
   }
 
@@ -76,33 +94,42 @@ export default class WsApiService implements IApiService {
 
   private handlePostConnection() {
     if (!this.ws) return;
+    this.logMessage("connected!");
     this.updateApiState({ status: "connected" });
   }
 
   private handleMessage(ev: MessageEvent) {
-    try {
-      const envelope = this.deps.serializer.deserialize(ev.data as Uint8Array);
+    void (async () => {
+      try {
+        const data = await (ev.data as Blob).arrayBuffer();
+        const envelope = this.deps.serializer.deserialize(new Uint8Array(data));
 
-      switch (envelope.type) {
-        case "sReceiveId":
-          this.updateApiState({ connectionId: envelope.id });
-          break;
+        switch (envelope.type) {
+          case "sReceiveId":
+            this.updateApiState({ connectionId: envelope.id });
+            break;
 
-        case "sOptionsUpdate":
-          this.updateApiState({ options: hydrateOptions(envelope.options) });
-          break;
+          case "sOptionsUpdate":
+            this.updateApiState({ options: hydrateOptions(envelope.options) });
+            break;
 
-        case "sGameStateUpdate":
-          this.updateApiState({ gameState: envelope.gameState });
-          break;
+          case "sGameStateUpdate":
+            this.updateApiState({
+              gameState: hydrateGameStateUpdate(envelope.gameState),
+            });
+            break;
 
-        default:
-          this.explicitlyCloseSocket("unhandled envelope type", envelope.type);
-          break;
+          default:
+            this.explicitlyCloseSocket(
+              "unhandled envelope type",
+              envelope.type,
+            );
+            break;
+        }
+      } catch (error) {
+        this.explicitlyCloseSocket("error handling message", error);
       }
-    } catch (error) {
-      this.explicitlyCloseSocket("error handling message", error);
-    }
+    })();
   }
 
   private sendMessage(envelope: ApiMessageEnvelope) {
@@ -118,11 +145,15 @@ export default class WsApiService implements IApiService {
   connect(uri: string) {
     this.logMessage(`Connecting to '${uri}'`);
     this.updateApiState({ status: "connecting" });
-    this.ws = new WebSocket(uri);
-    this.ws.onopen = this.handlePostConnection;
-    this.ws.onerror = this.handleSocketError;
-    this.ws.onclose = this.handleSocketClose;
-    this.ws.onmessage = this.handleMessage;
+    try {
+      this.ws = new WebSocket(uri);
+      this.ws.onopen = this.handlePostConnection.bind(this);
+      this.ws.onerror = this.handleSocketError.bind(this);
+      this.ws.onclose = this.handleSocketClose.bind(this);
+      this.ws.onmessage = this.handleMessage.bind(this);
+    } catch (error) {
+      this.explicitlyCloseSocket(`connect err: ${error}`, error);
+    }
   }
 
   disconnect(): void {

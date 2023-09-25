@@ -9,6 +9,7 @@ export function gameStateToGameStateUpdate(
     events: gameState.events,
     players: gameState.players.map((p) => ({
       ...p.profile,
+      id: p.id,
       score: p.completedTiles.length,
     })),
     tasks: gameState.tasks.map((t, index) => ({
@@ -27,5 +28,17 @@ export function hydrateOptions(options: SessionOptions): SessionOptions {
       includedTags: options.taskFilters.includedTags ?? [],
       excludedTags: options.taskFilters.excludedTags ?? [],
     },
+  };
+}
+
+export function hydrateGameStateUpdate(
+  update: GameStateUpdate,
+): GameStateUpdate {
+  return {
+    ...update,
+    tasks: update.tasks?.map((t) => ({
+      ...t,
+      colors: t.colors ?? [],
+    })),
   };
 }

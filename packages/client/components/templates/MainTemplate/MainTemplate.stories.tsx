@@ -39,7 +39,8 @@ export function Default() {
           timestamp: i,
           message: `(0${i}:${i % 3}${(i + 3) % 5}) Lorem ipsum **dolar** sitem`,
         }))}
-      isConnected={false}
+      connectionState="disconnected"
+      apiLogEvents={[]}
       onBoardTileClicked={(tileNo) => alert(`Tile ${tileNo} clicked`)}
       onLoadGameSetupClicked={() => alert("Load Game Setup clicked")}
       onStartGameClicked={() => alert("Start Game clicked")}

@@ -21,3 +21,22 @@ Object.defineProperty(window, "matchMedia", {
     dispatchEvent: jest.fn(),
   })),
 });
+jest.mock("figlet", () => {
+  return {
+    parseFont: jest.fn(),
+    text: (
+      _text: string,
+      _options: unknown,
+      callback: (idk: null, res: string) => void,
+    ) => {
+      callback(null, "");
+    },
+  };
+});
+jest.mock("figlet/importable-fonts/Blocks", () => null);
+global.fetch = jest.fn().mockImplementation(() => {
+  return Promise.resolve({
+    json: () => Promise.resolve({}),
+    text: () => Promise.resolve(""),
+  });
+});

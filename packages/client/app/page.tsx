@@ -1,9 +1,10 @@
 "use client";
-
 import type { Tile } from "@/components/organisms/Board";
 import { MainTemplate } from "@/components/templates";
+import useApiService from "@/services/ApiService/useApiService";
 import { ServiceRegistryContext } from "@/services/ServiceRegistry/ServiceRegistryContext";
 import { loadFileUTF8ContentFromPicker } from "@/utils/file";
+import type { Task } from "@webbnissarna/bingo-chill-common/src/api/types";
 import type {
   GameSetup,
   SessionOptions,
@@ -15,7 +16,9 @@ export default function Home() {
   // API
   /////////////////////////////////////////////////////////////////
   const serviceRegistry = useContext(ServiceRegistryContext);
-  const apiService = serviceRegistry.get("ApiService");
+  const { apiState, apiService } = useApiService(
+    serviceRegistry.get("ApiService"),
+  );
 
   /////////////////////////////////////////////////////////////////
   // Game Setup + Tiles
@@ -26,53 +29,70 @@ export default function Home() {
     checksum: "",
     tasks: [],
   });
-  const [tiles, setTiles] = useState<Tile[]>([]);
 
   const loadGameSetup = async () => {
     const data = await loadFileUTF8ContentFromPicker(".json");
     const newGameSetup = JSON.parse(data as string) as GameSetup;
     setGameSetup(newGameSetup);
-    setTiles(
-      newGameSetup.tasks
-        .slice(0, 25)
-        .map((t) => ({ text: t.name, icon: t.icon, colors: [] })),
-    );
   };
+
+  const apiTaskToTile = (task: Task): Tile => ({
+    text: task.name,
+    colors: task.colors,
+    icon: gameSetup.tasks.find((t) => t.name === task.name)?.icon ?? "",
+  });
 
   /////////////////////////////////////////////////////////////////
   // Session Options
   /////////////////////////////////////////////////////////////////
-  const [sessionOptions, setSessionOptions] = useState<SessionOptions>({
-    seed: 0,
-    isLockout: false,
-    taskFilters: { includedTags: [], excludedTags: [] },
-    timeLimitMinutes: 0,
-  });
-
   const updateSessionOptions = (newOptions: SessionOptions) => {
-    setSessionOptions({ ...newOptions });
+    apiService.updateOptions(newOptions);
+  };
+
+  const onConnectClicked = (uri: string) => {
+    if (apiState.status === "disconnected") {
+      apiService.connect(uri);
+    } else if (apiState.status === "connected") {
+      apiService.disconnect();
+    }
+  };
+
+  const onClickTile = (tileNo: number) => {
+    const me = apiState.gameState.players.find(
+      (p) => p.id === apiState.connectionId,
+    );
+    if (!me) return;
+
+    const task = apiState.gameState.tasks[tileNo];
+    apiService.updateTask({
+      index: tileNo,
+      isCompleted: !task.colors.includes(me.color),
+    });
   };
 
   return (
     <MainTemplate
-      title="Bingo Chillin'"
-      tiles={tiles}
+      title="Bingo Chill"
+      tiles={apiState.gameState.tasks.map(apiTaskToTile)}
       gameSetup={gameSetup}
-      sessionOptions={sessionOptions}
-      profiles={[]}
-      logEvents={[]}
-      isConnected={false}
-      onBoardTileClicked={function (tileNo: number): void {
-        throw new Error("Function not implemented.");
-      }}
+      sessionOptions={apiState.options}
+      profiles={apiState.gameState.players.map((p) => ({
+        id: p.name,
+        icon: p.icon,
+        badgeValue: p.score,
+        trimColor: p.color,
+      }))}
+      logEvents={apiState.gameState.events.map((e) => ({
+        message: e.message,
+        timestamp: e.elapsedTimeS,
+      }))}
+      apiLogEvents={apiState.logEvents}
+      connectionState={apiState.status}
+      onBoardTileClicked={onClickTile}
       onSessionOptionsChanged={updateSessionOptions}
       onLoadGameSetupClicked={loadGameSetup}
-      onStartGameClicked={function (): void {
-        throw new Error("Function not implemented.");
-      }}
-      onConnectClicked={function (uri: string): void {
-        throw new Error("Function not implemented.");
-      }}
+      onStartGameClicked={() => apiService.requestStart()}
+      onConnectClicked={onConnectClicked}
     />
   );
 }

@@ -14,6 +14,7 @@ export interface Task {
 }
 
 export interface Player extends Profile {
+  id: string;
   score: number;
 }
 

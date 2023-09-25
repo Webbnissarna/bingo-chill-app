@@ -4,6 +4,7 @@ exports[`Base64Icon renders 1`] = `
 <DocumentFragment>
   <img
     alt=""
+    class="w-full h-full object-contain"
     src=""
   />
 </DocumentFragment>

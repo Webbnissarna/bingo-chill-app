@@ -12,10 +12,11 @@ export default class ProtobufSerializer implements Serializer {
   load(protoFileContents: string): void {
     const parsed = protobuf.parse(protoFileContents);
     this.protoRoot = parsed.root;
+    console.log("loaded proto file", this.protoRoot.comment);
   }
 
   serialize(message: ApiMessageEnvelope): Uint8Array {
-    if (!this.protoRoot) throw new Error("not loaded");
+    if (!this.protoRoot) throw new Error("proto file not loaded");
 
     const envelopeType = this.protoRoot.lookupType("ApiMessageEnvelope");
     const envelope = envelopeType.create(message);
@@ -23,7 +24,7 @@ export default class ProtobufSerializer implements Serializer {
   }
 
   deserialize(data: Uint8Array): ApiMessageEnvelope {
-    if (!this.protoRoot) throw new Error("not loaded");
+    if (!this.protoRoot) throw new Error("proto file not loaded");
 
     const envelopeType = this.protoRoot.lookupType("ApiMessageEnvelope");
     const envelope = envelopeType.decode(data);

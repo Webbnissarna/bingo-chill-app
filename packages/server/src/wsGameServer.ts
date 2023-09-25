@@ -147,6 +147,7 @@ export default class WsGameServer {
   private handleClientMessage(playerId: string, event: MessageEvent<unknown>) {
     try {
       const envelope = this.serializer.deserialize(event.data as Uint8Array);
+      console.log(chalk.gray(`message: ${playerId} ${envelope.type}`));
 
       switch (envelope.type) {
         case "cUpdateProfile":

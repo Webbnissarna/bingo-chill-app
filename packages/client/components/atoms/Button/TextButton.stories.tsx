@@ -21,6 +21,13 @@ function StoryComponent({ text }: StoryProps) {
       <Button variant="dangerous" onClick={() => undefined}>
         Dangerous Action
       </Button>
+      <Button
+        variant="standard"
+        disabled
+        onClick={() => alert("Should never alert!")}
+      >
+        Disabled Button
+      </Button>
     </div>
   );
 }

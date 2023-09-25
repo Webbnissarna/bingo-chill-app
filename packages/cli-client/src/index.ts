@@ -88,7 +88,7 @@ function refreshScreen(triggerEvent: string) {
       `players:\n\t${state.gameState?.players
         ?.map(
           (p) =>
-            `${chalk.white(p.name)}: color=${chalk.hex(p.color)(
+            `${p.id} ${chalk.white(p.name)}: color=${chalk.hex(p.color)(
               p.color,
             )} score=${chalk.white(p.score)}`,
         )

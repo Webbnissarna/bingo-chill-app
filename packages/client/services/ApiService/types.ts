@@ -8,11 +8,16 @@ import type {
   TaskUpdate,
 } from "@webbnissarna/bingo-chill-common/src/game/types";
 
+export interface ApiLogEvent {
+  message: string;
+}
+
 export interface ApiState {
   status: "disconnected" | "connecting" | "connected";
   connectionId: string;
   options: SessionOptions;
   gameState: Required<GameStateUpdate>;
+  logEvents: ApiLogEvent[];
 }
 
 export interface ApiActions {

@@ -8,7 +8,7 @@ import type {
   SessionOptions,
 } from "@webbnissarna/bingo-chill-common/src/game/types";
 import type { Tag } from "@/components/atoms/TagsInput";
-import { Button, Heading } from "@/components/atoms";
+import { Button, Heading, MarkdownText } from "@/components/atoms";
 import {
   EditFilled,
   FolderOpenFilled,
@@ -19,6 +19,7 @@ import Board from "@/components/organisms/Board";
 import ProfileList from "@/components/organisms/ProfileList";
 import { ConnectionControls, LogBox } from "@/components/molecules";
 import { GameControls } from "@/components/organisms";
+import type { ApiLogEvent } from "@/services/ApiService/types";
 
 interface MainTemplateProps {
   title: string;
@@ -27,7 +28,8 @@ interface MainTemplateProps {
   sessionOptions: SessionOptions;
   profiles: Profile[];
   logEvents: Event[];
-  isConnected: boolean;
+  apiLogEvents: ApiLogEvent[];
+  connectionState: "connected" | "disconnected" | "connecting";
   onBoardTileClicked: (tileNo: number) => void;
   onSessionOptionsChanged: (newOptions: SessionOptions) => void;
   onLoadGameSetupClicked: () => void;
@@ -42,7 +44,8 @@ export default function MainTemplate({
   sessionOptions,
   profiles,
   logEvents,
-  isConnected,
+  apiLogEvents,
+  connectionState,
   onBoardTileClicked,
   onSessionOptionsChanged,
   onLoadGameSetupClicked,
@@ -50,13 +53,8 @@ export default function MainTemplate({
   onConnectClicked,
 }: MainTemplateProps): JSX.Element {
   const allTags: Tag[] = [
-    ...new Set(
-      (gameSetup?.tasks ?? [])
-        .map((task) => task.tags)
-        .flat()
-        .map((value) => ({ value, label: value })),
-    ),
-  ];
+    ...new Set((gameSetup?.tasks ?? []).map((task) => task.tags).flat()),
+  ].map((value) => ({ value, label: value }));
 
   return (
     <div className="bg-polarNight-0 min-h-screen p-2 flex flex-col gap-4 items-center">
@@ -90,7 +88,7 @@ export default function MainTemplate({
           <LogBox events={logEvents} />
         </div>
         <ConnectionControls
-          isConnected={isConnected}
+          state={connectionState}
           onConnectClicked={onConnectClicked}
         />
       </div>
@@ -106,6 +104,15 @@ export default function MainTemplate({
           <PlayCircleFilled />
           Start Game
         </Button>
+      </div>
+
+      {/* API Log Events */}
+      <div className="bg-polarNight-1 rounded max-h-36 flex flex-col p-2 w-full max-w-xl overflow-y-auto">
+        <div className="overflow-y-scroll scrollbar-thin">
+          {apiLogEvents.map((value, i) => (
+            <MarkdownText key={i}>{`no ${i} ${value.message}`}</MarkdownText>
+          ))}
+        </div>
       </div>
     </div>
   );

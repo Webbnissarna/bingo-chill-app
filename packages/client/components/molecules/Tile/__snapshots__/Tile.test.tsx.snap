@@ -3,7 +3,7 @@
 exports[`Tile renders 1`] = `
 <DocumentFragment>
   <div
-    class="max-w-[150px] max-h-[150px] aspect-square rounded-2xl bg-polarNight-3 flex flex-col items-center py-2 gap-1 cursor-pointer hover:bg-polarNight-2 active:bg-polarNight-1 hover:opacity-90 active:opacity-80 transition select-none"
+    class="max-w-[120px] max-h-[120px] aspect-square rounded-2xl bg-polarNight-3 flex flex-col items-center py-1 gap-1 cursor-pointer hover:bg-polarNight-2 active:bg-polarNight-1 hover:opacity-90 active:opacity-80 transition select-none"
   >
     <div
       class="grow h-2/3"
@@ -12,7 +12,7 @@ exports[`Tile renders 1`] = `
         class="text-center w-full h-full flex flex-col justify-center"
       >
         <span
-          class="undefined font-text text-snowStorm-2 text-xs sm:text-sm md:text-base lg:text-lg leading-snug inline-block w-full max-h-full rounded px-2 py-1"
+          class="undefined font-text text-snowStorm-2 text-xs sm:text-base leading-snug inline-block w-full max-h-full rounded px-2 py-1"
         />
       </div>
     </div>
@@ -21,6 +21,7 @@ exports[`Tile renders 1`] = `
     >
       <img
         alt=""
+        class="w-full h-full object-contain"
         src=""
       />
     </div>
