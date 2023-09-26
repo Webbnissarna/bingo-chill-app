@@ -8,8 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "wsldev": "next dev -H $(hostname -I)",
-    "test": "jest",
-    "test-ci": "jest --ci",
+    "test": "jest --ci",
     "retest": "jest --updateSnapshot",
     "ladle": "ladle serve",
     "wslladle": "ladle serve -h $(hostname -I)"

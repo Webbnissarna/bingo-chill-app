@@ -84,6 +84,9 @@ function refreshScreen(triggerEvent: string) {
     )}`,
   );
   console.log(
+    `${chalk.gray("checksum:")} ${chalk.white(state.gameState?.checksum)}`,
+  );
+  console.log(
     chalk.gray(
       `players:\n\t${state.gameState?.players
         ?.map(

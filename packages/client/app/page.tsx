@@ -74,6 +74,7 @@ export default function Home() {
     <MainTemplate
       title="Bingo Chill"
       tiles={apiState.gameState.tasks.map(apiTaskToTile)}
+      desiredChecksum={apiState.gameState.checksum}
       gameSetup={gameSetup}
       sessionOptions={apiState.options}
       profiles={apiState.gameState.players.map((p) => ({

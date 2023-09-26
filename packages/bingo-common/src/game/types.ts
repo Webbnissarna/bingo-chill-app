@@ -23,7 +23,6 @@ export interface TaskFilters {
 }
 
 export interface SessionOptions {
-  /* checksum: string; */
   seed: number;
   taskFilters: TaskFilters;
   isLockout: boolean;
@@ -52,6 +51,7 @@ export interface Event {
 }
 
 export interface GameState {
+  checksum: string;
   startTimestamp: string;
   players: Player[];
   tasks: ActiveTask[];

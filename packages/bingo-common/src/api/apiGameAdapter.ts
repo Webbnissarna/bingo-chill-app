@@ -5,6 +5,7 @@ export function gameStateToGameStateUpdate(
   gameState: GameState,
 ): GameStateUpdate {
   return {
+    checksum: gameState.checksum,
     startTimestamp: gameState.startTimestamp,
     events: gameState.events,
     players: gameState.players.map((p) => ({

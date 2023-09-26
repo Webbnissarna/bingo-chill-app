@@ -3,6 +3,7 @@ import type { GameSetup, GameState } from "./types";
 import crc32 from "crc/crc32";
 
 const BLANK_GAME_STATE: GameState = {
+  checksum: "",
   startTimestamp: "",
   tasks: [],
   players: [],

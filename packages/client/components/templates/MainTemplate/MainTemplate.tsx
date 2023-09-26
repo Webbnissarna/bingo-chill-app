@@ -8,7 +8,12 @@ import type {
   SessionOptions,
 } from "@webbnissarna/bingo-chill-common/src/game/types";
 import type { Tag } from "@/components/atoms/TagsInput";
-import { Button, Heading, MarkdownText } from "@/components/atoms";
+import {
+  Button,
+  ChecksumIndicator,
+  Heading,
+  MarkdownText,
+} from "@/components/atoms";
 import {
   EditFilled,
   FolderOpenFilled,
@@ -24,6 +29,7 @@ import type { ApiLogEvent } from "@/services/ApiService/types";
 interface MainTemplateProps {
   title: string;
   tiles: Tile[];
+  desiredChecksum: string;
   gameSetup: GameSetup | undefined;
   sessionOptions: SessionOptions;
   profiles: Profile[];
@@ -40,6 +46,7 @@ interface MainTemplateProps {
 export default function MainTemplate({
   title,
   tiles,
+  desiredChecksum,
   gameSetup,
   sessionOptions,
   profiles,
@@ -95,6 +102,10 @@ export default function MainTemplate({
 
       {/* Controls */}
       <div className="bg-polarNight-1 rounded flex flex-col gap-2 p-2 w-full max-w-xl">
+        <ChecksumIndicator
+          actual={gameSetup?.checksum}
+          desired={desiredChecksum}
+        />
         <GameControls
           options={sessionOptions}
           onChange={onSessionOptionsChanged}

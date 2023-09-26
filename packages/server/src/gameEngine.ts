@@ -167,10 +167,11 @@ export default class GameEngine implements IGameEngine {
       return;
     }
 
+    this.gameSetup = setup;
+    this.gameState.checksum = setup.checksum;
     this.addEvent(
       `(*server*): Loaded game **${setup.name}** (${setup.checksum})`,
     );
-    this.gameSetup = setup;
   }
 
   public addPlayer(): Player {

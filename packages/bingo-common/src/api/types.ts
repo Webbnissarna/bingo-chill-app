@@ -19,6 +19,7 @@ export interface Player extends Profile {
 }
 
 export interface GameStateUpdate {
+  checksum?: string;
   startTimestamp?: string;
   players?: Player[];
   tasks?: Task[];

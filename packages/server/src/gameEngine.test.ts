@@ -135,6 +135,17 @@ describe("GameEngine", () => {
     });
   });
 
+  it("loads a setup", () => {
+    const gameEngine = new GameEngine({
+      dateTime: new MockDateTimeProvider(),
+      rng: new SeededRandom(),
+    });
+
+    gameEngine.loadSetup(MOCK_GAME);
+
+    expect(gameEngine.getGameState().checksum).toBe("abc");
+  });
+
   it("starts a game", () => {
     const gameEngine = new GameEngine({
       dateTime: new MockDateTimeProvider(),
@@ -170,6 +181,7 @@ describe("GameEngine", () => {
       rng: new SeededRandom(),
     });
 
+    expect(gameEngine.getGameState().checksum).toBe("");
     expect(gameEngine.getGameState().players).toHaveLength(0);
     expect(gameEngine.getGameState().events).toHaveLength(0);
     expect(gameEngine.getGameState().isLockout).toBe(false);

@@ -19,10 +19,11 @@ message Event {
 }
 
 message GameStateUpdate {
-  string startTimestamp = 1;
-  repeated Player players = 2;
-  repeated Task tasks = 3;
-  repeated Event events = 4;
+  string checksum = 1;
+  string startTimestamp = 2;
+  repeated Player players = 3;
+  repeated Task tasks = 4;
+  repeated Event events = 5;
 }
 
 message TaskFilters {
