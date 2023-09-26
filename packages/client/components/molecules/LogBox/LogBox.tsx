@@ -1,4 +1,5 @@
 import MarkdownText from "@/components/atoms/MarkdownText/MarkdownText";
+import { secondsToMinutesAndSeconds } from "@webbnissarna/bingo-chill-common/src/utils/functional";
 import { useEffect, useRef } from "react";
 
 export interface Event {
@@ -24,7 +25,9 @@ export default function LogBox({ events }: LogBoxProps): JSX.Element {
     <div className="bg-polarNight-0 h-full rounded-xl px-3 py-2 flex flex-col overflow-y-auto">
       <div ref={ref} className="overflow-y-scroll scrollbar-thin relative">
         {events.map(({ timestamp, message }, i) => (
-          <MarkdownText key={i}>{`${timestamp} ${message}`}</MarkdownText>
+          <MarkdownText key={i}>{`${secondsToMinutesAndSeconds(
+            timestamp,
+          )} ${message}`}</MarkdownText>
         ))}
       </div>
     </div>

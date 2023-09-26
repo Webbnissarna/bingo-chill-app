@@ -108,3 +108,12 @@ export function HSVtoHEX(h: number, s: number, v: number): string {
 
   return `#${hexR}${hexG}${hexB}`;
 }
+
+export function secondsToMinutesAndSeconds(seconds: number): string {
+  const minutes = Math.floor(seconds / 60);
+  const mstr = minutes < 10 ? `0${minutes}` : `${minutes}`;
+  const restSecs = seconds % 60;
+  const sstr = restSecs < 10 ? `0${restSecs}` : `${restSecs}`;
+
+  return `${mstr}:${sstr}`;
+}

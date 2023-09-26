@@ -3,6 +3,7 @@ import {
   addIfMissing,
   patch,
   removeIfPresent,
+  secondsToMinutesAndSeconds,
   uniqueValuesReducer,
   useIf,
 } from "./functional";
@@ -201,6 +202,25 @@ describe("functional", () => {
     ])("converts %d %d %d => %s", (h, s, v, hex) => {
       const result = HSVtoHEX(h, s, v);
       expect(result).toBe(hex);
+    });
+  });
+
+  describe("secondsToMinutesAndSeconds", () => {
+    it.each([
+      [0, "00:00"],
+      [1, "00:01"],
+      [33, "00:33"],
+      [60, "01:00"],
+      [120, "02:00"],
+      [260, "04:20"],
+      [600, "10:00"],
+      [601, "10:01"],
+      [6000, "100:00"],
+      [1234, "20:34"],
+      [5999, "99:59"],
+    ])("for %d returns %s", (secs, expected) => {
+      const result = secondsToMinutesAndSeconds(secs);
+      expect(result).toBe(expected);
     });
   });
 });
