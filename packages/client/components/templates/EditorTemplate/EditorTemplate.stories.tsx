@@ -50,5 +50,5 @@ export function Default() {
 }
 
 export default {
-  title: "Templates / EditorTemplate",
+  title: "Templates / Editor Template",
 } satisfies StoryDefault;

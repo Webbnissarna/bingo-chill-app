@@ -8,6 +8,7 @@ import SeedRandomRandomnessService from "../RandomnessService/seedrandomRandomne
 import DayjsDateTime from "@webbnissarna/bingo-chill-common/src/dateTime/dayjsDateTime";
 import WsApiService from "../ApiService/wsApiService";
 import ProtobufSerializer from "@webbnissarna/bingo-chill-common/src/serialization/protobufSerializer";
+import { FullPageLoadingTemplate } from "@/components/templates";
 
 export const ServiceRegistryContext = createContext<ServiceRegistry>({
   get() {
@@ -53,7 +54,7 @@ export default function DefaultServiceRegistryProvider({
   });
 
   if (serviceRegistry === null) {
-    return <span>loading...</span>;
+    return <FullPageLoadingTemplate />;
   }
 
   return (

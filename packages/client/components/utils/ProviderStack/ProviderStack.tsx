@@ -59,6 +59,9 @@ export default function ProviderStack({
               titleColor: nordThemeColors.snowStorm[0],
             },
             ColorPicker: {},
+            Spin: {
+              colorPrimary: nordThemeColors.frost[1],
+            },
           },
         }}
       >
