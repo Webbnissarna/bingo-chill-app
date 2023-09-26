@@ -1,7 +1,7 @@
 import { TextInputField, Button } from "@/components/atoms";
 import { useState } from "react";
 
-interface ConnectionControlsProps {
+export interface ConnectionControlsProps {
   state: "connected" | "disconnected" | "connecting";
   onConnectClicked: (connectionUri: string) => void;
 }

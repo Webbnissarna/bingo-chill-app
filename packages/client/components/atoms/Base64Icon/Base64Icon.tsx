@@ -8,6 +8,7 @@ export default function Base64Icon({
   description,
 }: Base64IconProps): JSX.Element {
   return (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       className="w-full h-full object-contain"
       src={src}

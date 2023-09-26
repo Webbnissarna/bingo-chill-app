@@ -9,30 +9,35 @@ export function Default() {
         profiles={[
           {
             id: "a",
+            name: "a",
             icon: SPOOKY_GHOST_IMAGE_BASE64,
             badgeValue: 0,
             trimColor: "#bf616a",
           },
           {
             id: "b",
+            name: "b",
             icon: SPOOKY_GHOST_IMAGE_BASE64,
             badgeValue: 1,
             trimColor: "#a3be8c",
           },
           {
             id: "c",
+            name: "c",
             icon: SPOOKY_GHOST_IMAGE_BASE64,
             badgeValue: 2,
             trimColor: "#b48ead",
           },
           {
             id: "d",
+            name: "d",
             icon: SPOOKY_GHOST_IMAGE_BASE64,
             badgeValue: 3,
             trimColor: "#ebcb8b",
           },
           {
             id: "e",
+            name: "e",
             icon: SPOOKY_GHOST_IMAGE_BASE64,
             badgeValue: 4,
             trimColor: "#d08770",
