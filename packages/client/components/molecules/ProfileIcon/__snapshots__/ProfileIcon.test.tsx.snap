@@ -3,28 +3,37 @@
 exports[`ProfileIcon renders 1`] = `
 <DocumentFragment>
   <div
-    class="w-14 h-14 rounded-xl bg-polarNight-0 flex items-center justify-center relative"
+    class="w-14 text-base font-text text-snowStorm-0 flex flex-col items-center"
   >
     <div
-      class="max-h-full aspect-square"
+      class="w-full h-14 rounded-xl bg-polarNight-0 flex items-center justify-center relative"
     >
-      <img
-        alt="profile"
-        class="w-full h-full object-contain"
-        src=""
-      />
-    </div>
-    <div
-      class="w-10/12 h-1 rounded-lg absolute bottom-0"
-    />
-    <div
-      class="w-8 h-8 bg-polarNight-3 rounded-full absolute -top-4 -right-4 flex items-center justify-center"
-    >
-      <span
-        class="font-text text-snowStorm-2 text-base"
+      <div
+        class="max-h-full aspect-square"
       >
-        0
-      </span>
+        <img
+          alt="profile"
+          class="w-full h-full object-contain"
+          src=""
+        />
+      </div>
+      <div
+        class="w-10/12 h-1 rounded-lg absolute bottom-0"
+      />
+      <div
+        class="w-8 h-8 bg-polarNight-3 rounded-full absolute -top-4 -right-4 flex items-center justify-center"
+      >
+        <span
+          class="font-text text-snowStorm-2 text-base"
+        >
+          0
+        </span>
+      </div>
+    </div>
+    <div>
+      <span
+        class="block text-center"
+      />
     </div>
   </div>
 </DocumentFragment>

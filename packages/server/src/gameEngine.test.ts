@@ -131,7 +131,7 @@ describe("GameEngine", () => {
     expect(lastEvent).toMatchObject<Event>({
       elapsedTimeS: 0,
       message:
-        '<span color="#bf616a">(*server*): Setup for "Mock" (cs=abc) contains duplicate task(s): "A", "B"</span>',
+        '<span style="color: #bf616a">(**server**): Setup for "Mock" (cs=abc) contains duplicate task(s): "A", "B"</span>',
     });
   });
 
@@ -171,7 +171,8 @@ describe("GameEngine", () => {
 
     expect(lastEvent).toMatchObject<Event>({
       elapsedTimeS: 0,
-      message: '<span color="#bf616a">(*server*): No game setup loaded</span>',
+      message:
+        '<span style="color: #bf616a">(**server**): No game setup loaded</span>',
     });
   });
 
@@ -285,7 +286,7 @@ describe("GameEngine", () => {
     expect(lastEvent).toMatchObject<Event>({
       elapsedTimeS: 0,
       message:
-        '<span color="#bf616a">(*server*): Not enough tasks (20) after filtering</span>',
+        '<span style="color: #bf616a">(**server**): Not enough tasks (20) after filtering</span>',
     });
   });
 
@@ -753,7 +754,7 @@ describe("GameEngine", () => {
       expect(result).toMatchObject<Event>({
         elapsedTimeS: 15,
         message: expect.stringMatching(
-          /<span color="DEDBEF">\*Me\*<\/span> completed \*\)\*$/,
+          /<span style="color: DEDBEF">\*Me\*<\/span> completed \*\*\)\*\*$/,
         ),
       });
     });
@@ -797,7 +798,7 @@ describe("GameEngine", () => {
       expect(result).toMatchObject<Event>({
         elapsedTimeS: 15,
         message: expect.stringMatching(
-          /^<span color="DEDBEF">\*Me\*<\/span> disconnected$/,
+          /^<span style="color: DEDBEF">\*Me\*<\/span> disconnected$/,
         ),
       });
     });
@@ -827,19 +828,19 @@ describe("GameEngine", () => {
       expect(result1).toMatchObject<Event>({
         elapsedTimeS: 15,
         message: expect.stringMatching(
-          /^<span color="#[a-z0-9]{6}">\*\(0\)\*<\/span> is now <span>\*Me\*<\/span>$/,
+          /^<span style="color: #[a-z0-9]{6}">\*\(0\)\*<\/span> is now <span>\*Me\*<\/span>$/,
         ),
       });
       expect(result2).toMatchObject<Event>({
         elapsedTimeS: 15,
         message: expect.stringMatching(
-          /^<span color="#[a-z0-9]{6}">\*Me\*<\/span> changed color to <span color="#DEDBEF">#DEDBEF<\/span>$/,
+          /^<span style="color: #[a-z0-9]{6}">\*Me\*<\/span> changed color to <span style="color: #DEDBEF">#DEDBEF<\/span>$/,
         ),
       });
       expect(result3).toMatchObject<Event>({
         elapsedTimeS: 15,
         message: expect.stringMatching(
-          /^<span color="#DEDBEF">\*Me\*<\/span> changed icon$/,
+          /^<span style="color: #DEDBEF">\*Me\*<\/span> changed icon$/,
         ),
       });
     });
@@ -941,7 +942,7 @@ describe("GameEngine", () => {
       expect(result).toMatchObject<Event>({
         elapsedTimeS: 15,
         message: expect.stringMatching(
-          /^<span color="DEDBEF">\*Me\*<\/span> \*BINGO\*!$/,
+          /^<span style="color: DEDBEF">\*Me\*<\/span> \*\*BINGO\*\*! 🎉$/,
         ),
       });
       expect(updateHandler).toHaveBeenCalledWith(gameEngine.getGameState());

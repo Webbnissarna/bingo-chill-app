@@ -31,7 +31,7 @@ export interface ApiActions {
 export type ApiStateUpdateDelegate = (apiState: ApiState) => void;
 
 export interface IApiService extends ApiActions {
-  connect(uri: string): void;
+  connect(uri: string, initialProfile: Required<ProfileUpdate>): void;
   disconnect(): void;
   getApiState(): ApiState;
   addStateUpdateListener(delegate: ApiStateUpdateDelegate): void;

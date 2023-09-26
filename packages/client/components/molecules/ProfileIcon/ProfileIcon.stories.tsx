@@ -3,14 +3,16 @@ import ProfileIcon from ".";
 import { SPOOKY_GHOST_IMAGE_BASE64 } from "@/.ladle/constants";
 
 interface StoryProps {
+  name: string;
   badgeValue: number;
   trimColor: string;
 }
 
-function StoryComponent({ badgeValue, trimColor }: StoryProps) {
+function StoryComponent({ name, badgeValue, trimColor }: StoryProps) {
   return (
     <div className="bg-polarNight-1 p-5">
       <ProfileIcon
+        name={name}
         icon={SPOOKY_GHOST_IMAGE_BASE64}
         badgeValue={badgeValue}
         trimColor={trimColor}
@@ -22,11 +24,15 @@ function StoryComponent({ badgeValue, trimColor }: StoryProps) {
 export const Default: Story<StoryProps> = StoryComponent;
 
 Default.args = {
+  name: "Player",
   badgeValue: 5,
   trimColor: "#bf616a",
 };
 
 Default.argTypes = {
+  name: {
+    control: { type: "text" },
+  },
   badgeValue: {
     control: { type: "number" },
   },

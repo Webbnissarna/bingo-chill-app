@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProfileEditor renders 1`] = `
+<DocumentFragment>
+  <div
+    class="w-14 h-14 p-1 rounded-xl bg-polarNight-3 flex items-center justify-center relative cursor-pointer hover:bg-frost-3 active:bg-frost-2 transition"
+  >
+    <div
+      class="max-h-full aspect-square"
+    >
+      <img
+        alt="profile"
+        class="w-full h-full object-contain"
+        src=""
+      />
+    </div>
+    <div
+      class="w-10/12 h-1 rounded-lg absolute bottom-0"
+    />
+  </div>
+</DocumentFragment>
+`;

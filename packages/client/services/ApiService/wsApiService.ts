@@ -2,6 +2,7 @@ import type { Serializer } from "@webbnissarna/bingo-chill-common/src/serializat
 import type { ApiState, ApiStateUpdateDelegate, IApiService } from "./types";
 import type {
   Profile,
+  ProfileUpdate,
   SessionOptions,
   TaskUpdate,
 } from "@webbnissarna/bingo-chill-common/src/game/types";
@@ -36,6 +37,7 @@ export default class WsApiService implements IApiService {
         timeLimitMinutes: 0,
       },
       gameState: {
+        checksum: "",
         startTimestamp: "",
         events: [],
         players: [],
@@ -92,10 +94,11 @@ export default class WsApiService implements IApiService {
     this.updateApiState({ status: "disconnected" });
   }
 
-  private handlePostConnection() {
+  private handlePostConnection(initialProfile: Required<ProfileUpdate>) {
     if (!this.ws) return;
     this.logMessage("connected!");
     this.updateApiState({ status: "connected" });
+    this.updateProfile(initialProfile);
   }
 
   private handleMessage(ev: MessageEvent) {
@@ -142,12 +145,12 @@ export default class WsApiService implements IApiService {
   /////////////////////////////////////////////////////////////////
   // IApiService
   /////////////////////////////////////////////////////////////////
-  connect(uri: string) {
+  connect(uri: string, initialProfile: Required<ProfileUpdate>) {
     this.logMessage(`Connecting to '${uri}'`);
     this.updateApiState({ status: "connecting" });
     try {
       this.ws = new WebSocket(uri);
-      this.ws.onopen = this.handlePostConnection.bind(this);
+      this.ws.onopen = () => this.handlePostConnection(initialProfile);
       this.ws.onerror = this.handleSocketError.bind(this);
       this.ws.onclose = this.handleSocketClose.bind(this);
       this.ws.onmessage = this.handleMessage.bind(this);

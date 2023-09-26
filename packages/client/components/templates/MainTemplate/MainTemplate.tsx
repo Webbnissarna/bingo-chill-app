@@ -3,6 +3,7 @@
 import type { Event } from "@/components/molecules/LogBox";
 import type { Tile } from "@/components/organisms/Board";
 import type { Profile } from "@/components/organisms/ProfileList";
+import type { Profile as BaseProfile } from "@/components/organisms/ProfileEditor";
 import type {
   GameSetup,
   SessionOptions,
@@ -23,7 +24,7 @@ import Link from "next/link";
 import Board from "@/components/organisms/Board";
 import ProfileList from "@/components/organisms/ProfileList";
 import { ConnectionControls, LogBox } from "@/components/molecules";
-import { GameControls } from "@/components/organisms";
+import { GameControls, ProfileEditor } from "@/components/organisms";
 import type { ApiLogEvent } from "@/services/ApiService/types";
 
 interface MainTemplateProps {
@@ -32,10 +33,12 @@ interface MainTemplateProps {
   desiredChecksum: string;
   gameSetup: GameSetup | undefined;
   sessionOptions: SessionOptions;
+  myProfile: BaseProfile;
   profiles: Profile[];
   logEvents: Event[];
   apiLogEvents: ApiLogEvent[];
   connectionState: "connected" | "disconnected" | "connecting";
+  onProfileChanged: (newProfile: BaseProfile) => void;
   onBoardTileClicked: (tileNo: number) => void;
   onSessionOptionsChanged: (newOptions: SessionOptions) => void;
   onLoadGameSetupClicked: () => void;
@@ -49,10 +52,12 @@ export default function MainTemplate({
   desiredChecksum,
   gameSetup,
   sessionOptions,
+  myProfile,
   profiles,
   logEvents,
   apiLogEvents,
   connectionState,
+  onProfileChanged,
   onBoardTileClicked,
   onSessionOptionsChanged,
   onLoadGameSetupClicked,
@@ -67,7 +72,7 @@ export default function MainTemplate({
     <div className="bg-polarNight-0 min-h-screen p-2 flex flex-col gap-4 items-center">
       {/* Top */}
       <div className="w-full flex flex-row gap-2 items-center">
-        <div id="profile" className="w-10 h-10 rounded bg-polarNight-3" />
+        <ProfileEditor profile={myProfile} onChanged={onProfileChanged} />
         <div className="grow" />
         <Button onClick={onLoadGameSetupClicked}>
           <FolderOpenFilled /> Load Game Setup

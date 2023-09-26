@@ -29,7 +29,8 @@ export default function ProviderStack({
               colorPrimaryHover: "#a80",
               colorText: nordThemeColors.snowStorm[2],
               colorTextDescription: "#e09",
-              controlHeightLG: 25,
+              controlHeightLG: 30,
+              marginXS: 0,
             },
             Select: {
               clearBg: nordThemeColors.polarNight[3],
@@ -52,6 +53,12 @@ export default function ProviderStack({
               rowHoverBg: nordThemeColors.polarNight[2],
               colorBgContainer: nordThemeColors.polarNight[1],
             },
+            Modal: {
+              contentBg: nordThemeColors.polarNight[1],
+              headerBg: nordThemeColors.polarNight[1],
+              titleColor: nordThemeColors.snowStorm[0],
+            },
+            ColorPicker: {},
           },
         }}
       >

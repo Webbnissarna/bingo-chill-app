@@ -2,6 +2,7 @@ import ProfileIcon from "@/components/molecules/ProfileIcon/ProfileIcon";
 
 export interface Profile {
   id: string;
+  name: string;
   icon: string;
   badgeValue: number;
   trimColor: string;
@@ -19,6 +20,7 @@ export default function ProfileList({
       {profiles.map((profile) => (
         <div key={profile.id}>
           <ProfileIcon
+            name={profile.name}
             icon={profile.icon}
             badgeValue={profile.badgeValue}
             trimColor={profile.trimColor}

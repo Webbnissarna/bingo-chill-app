@@ -45,7 +45,7 @@ export interface GameEngineDependencies {
 }
 
 function getPlayerColoredName(player: Player): string {
-  return `<span color="${player.profile.color}">*${player.profile.name}*</span>`;
+  return `<span style="color: ${player.profile.color}">*${player.profile.name}*</span>`;
 }
 
 export default class GameEngine implements IGameEngine {
@@ -86,7 +86,7 @@ export default class GameEngine implements IGameEngine {
 
   private addErrorEvent(baseMessage: string): void {
     this.addEvent(
-      `<span color="${nordThemeColors.aurora[0]}">(*server*): ${baseMessage}</span>`,
+      `<span style="color: ${nordThemeColors.aurora[0]}">(**server**): ${baseMessage}</span>`,
     );
   }
 
@@ -170,7 +170,7 @@ export default class GameEngine implements IGameEngine {
     this.gameSetup = setup;
     this.gameState.checksum = setup.checksum;
     this.addEvent(
-      `(*server*): Loaded game **${setup.name}** (${setup.checksum})`,
+      `(*server*): Loaded game **${setup.name}** by ${setup.meta.author} (v${setup.meta.version} ${setup.checksum})`,
     );
   }
 
@@ -276,7 +276,7 @@ export default class GameEngine implements IGameEngine {
         `${getPlayerColoredName({
           ...player,
           profile: { ...player.profile, color: initialProfile.color },
-        })} changed color to <span color="${update.color}">${
+        })} changed color to <span style="color: ${update.color}">${
           update.color
         }</span>`,
       );
@@ -319,7 +319,9 @@ export default class GameEngine implements IGameEngine {
 
     if (update.isCompleted) {
       player.completedTiles = addIfMissing(player.completedTiles, update.index);
-      this.addEvent(`${getPlayerColoredName(player)} completed *${task.name}*`);
+      this.addEvent(
+        `${getPlayerColoredName(player)} completed **${task.name}**`,
+      );
     } else {
       player.completedTiles = removeIfPresent(
         player.completedTiles,
@@ -332,7 +334,7 @@ export default class GameEngine implements IGameEngine {
     const didJustWin = hasWon && !wasInitiallyWon;
 
     if (didJustWin) {
-      this.addEvent(`${getPlayerColoredName(player)} *BINGO*!`);
+      this.addEvent(`${getPlayerColoredName(player)} **BINGO**! 🎉`);
     }
   }
 

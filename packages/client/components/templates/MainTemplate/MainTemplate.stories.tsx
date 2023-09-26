@@ -3,6 +3,7 @@ import MainTemplate from ".";
 import { SPOOKY_GHOST_IMAGE_BASE64 } from "@/.ladle/constants";
 import { useState } from "react";
 import type { SessionOptions } from "@webbnissarna/bingo-chill-common/src/game/types";
+import type { Profile } from "@/components/organisms/ProfileEditor";
 
 export function Default() {
   const [options, setOptions] = useState<SessionOptions>({
@@ -15,6 +16,12 @@ export function Default() {
     timeLimitMinutes: 0,
   });
 
+  const [profile, setProfile] = useState<Profile>({
+    name: "Me",
+    icon: SPOOKY_GHOST_IMAGE_BASE64,
+    color: "#8fbcbb",
+  });
+
   return (
     <MainTemplate
       title="Bingo Chillin'"
@@ -25,10 +32,14 @@ export function Default() {
           icon: SPOOKY_GHOST_IMAGE_BASE64,
           colors: [],
         }))}
+      myProfile={profile}
+      desiredChecksum=""
+      onProfileChanged={(p) => setProfile({ ...p })}
       profiles={Array(4)
         .fill(0)
         .map((_, i) => ({
           id: `${i}`,
+          name: `${i}`,
           icon: SPOOKY_GHOST_IMAGE_BASE64,
           badgeValue: i * 5,
           trimColor: ["#bf616a", "#a3be8c", "#d08770", "#81a1c1"][i],

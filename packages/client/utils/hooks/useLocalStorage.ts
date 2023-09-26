@@ -18,7 +18,7 @@ export default function useLocalStorage<T>(
 
   const setter = (newValue: T) => {
     window.localStorage.setItem(key, JSON.stringify(newValue));
-    setValue(newValue);
+    setValue({ ...newValue });
   };
 
   return [value, setter];

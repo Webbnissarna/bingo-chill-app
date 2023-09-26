@@ -1,9 +1,12 @@
 "use client";
+import { SPOOKY_GHOST_IMAGE_BASE64 } from "@/.ladle/constants";
 import type { Tile } from "@/components/organisms/Board";
+import type { Profile } from "@/components/organisms/ProfileEditor";
 import { MainTemplate } from "@/components/templates";
 import useApiService from "@/services/ApiService/useApiService";
 import { ServiceRegistryContext } from "@/services/ServiceRegistry/ServiceRegistryContext";
 import { loadFileUTF8ContentFromPicker } from "@/utils/file";
+import useLocalStorage from "@/utils/hooks/useLocalStorage";
 import type { Task } from "@webbnissarna/bingo-chill-common/src/api/types";
 import type {
   GameSetup,
@@ -12,6 +15,12 @@ import type {
 import { useContext, useState } from "react";
 
 export default function Home() {
+  const [myProfile, setMyProfile] = useLocalStorage<Profile>("", {
+    name: "Me",
+    icon: SPOOKY_GHOST_IMAGE_BASE64,
+    color: "#5e81ac",
+  });
+
   /////////////////////////////////////////////////////////////////
   // API
   /////////////////////////////////////////////////////////////////
@@ -20,38 +29,9 @@ export default function Home() {
     serviceRegistry.get("ApiService"),
   );
 
-  /////////////////////////////////////////////////////////////////
-  // Game Setup + Tiles
-  /////////////////////////////////////////////////////////////////
-  const [gameSetup, setGameSetup] = useState<GameSetup>({
-    name: "",
-    meta: { author: "", timestamp: "", version: "" },
-    checksum: "",
-    tasks: [],
-  });
-
-  const loadGameSetup = async () => {
-    const data = await loadFileUTF8ContentFromPicker(".json");
-    const newGameSetup = JSON.parse(data as string) as GameSetup;
-    setGameSetup(newGameSetup);
-  };
-
-  const apiTaskToTile = (task: Task): Tile => ({
-    text: task.name,
-    colors: task.colors,
-    icon: gameSetup.tasks.find((t) => t.name === task.name)?.icon ?? "",
-  });
-
-  /////////////////////////////////////////////////////////////////
-  // Session Options
-  /////////////////////////////////////////////////////////////////
-  const updateSessionOptions = (newOptions: SessionOptions) => {
-    apiService.updateOptions(newOptions);
-  };
-
   const onConnectClicked = (uri: string) => {
     if (apiState.status === "disconnected") {
-      apiService.connect(uri);
+      apiService.connect(uri, myProfile);
     } else if (apiState.status === "connected") {
       apiService.disconnect();
     }
@@ -70,6 +50,40 @@ export default function Home() {
     });
   };
 
+  const updateSessionOptions = (newOptions: SessionOptions) => {
+    apiService.updateOptions(newOptions);
+  };
+
+  const onMyProfileChanged = (newProfile: Profile) => {
+    setMyProfile(newProfile);
+    apiService.updateProfile(newProfile);
+  };
+
+  /////////////////////////////////////////////////////////////////
+  // Game Setup
+  /////////////////////////////////////////////////////////////////
+  const [gameSetup, setGameSetup] = useState<GameSetup>({
+    name: "",
+    meta: { author: "", timestamp: "", version: "" },
+    checksum: "",
+    tasks: [],
+  });
+
+  const loadGameSetup = async () => {
+    const data = await loadFileUTF8ContentFromPicker(".json");
+    const newGameSetup = JSON.parse(data as string) as GameSetup;
+    setGameSetup(newGameSetup);
+  };
+
+  /////////////////////////////////////////////////////////////////
+  // Session Options
+  /////////////////////////////////////////////////////////////////
+  const apiTaskToTile = (task: Task): Tile => ({
+    text: task.name,
+    colors: task.colors,
+    icon: gameSetup.tasks.find((t) => t.name === task.name)?.icon ?? "",
+  });
+
   return (
     <MainTemplate
       title="Bingo Chill"
@@ -77,8 +91,11 @@ export default function Home() {
       desiredChecksum={apiState.gameState.checksum}
       gameSetup={gameSetup}
       sessionOptions={apiState.options}
+      myProfile={myProfile}
+      onProfileChanged={onMyProfileChanged}
       profiles={apiState.gameState.players.map((p) => ({
         id: p.name,
+        name: p.name,
         icon: p.icon,
         badgeValue: p.score,
         trimColor: p.color,
