@@ -2,8 +2,31 @@
 
 exports[`ProviderStack renders 1`] = `
 <DocumentFragment>
-  <span>
-    loading...
-  </span>
+  <div
+    class="w-screen h-screen max-w-full max-h-full bg-polarNight-0 flex items-center justify-center"
+  >
+    <div
+      aria-busy="true"
+      aria-live="polite"
+      class="ant-spin ant-spin-lg ant-spin-spinning css-dev-only-do-not-override-18iikkb"
+    >
+      <span
+        class="ant-spin-dot ant-spin-dot-spin"
+      >
+        <i
+          class="ant-spin-dot-item"
+        />
+        <i
+          class="ant-spin-dot-item"
+        />
+        <i
+          class="ant-spin-dot-item"
+        />
+        <i
+          class="ant-spin-dot-item"
+        />
+      </span>
+    </div>
+  </div>
 </DocumentFragment>
 `;
