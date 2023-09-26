@@ -76,8 +76,8 @@
     "vite": "^4.4.9"
   },
   "engines": {
-    "node": "19",
-    "yarn": "1.22"
+    "node": ">= 18",
+    "yarn": ">= 1.22"
   },
   "license": "ISC"
 }

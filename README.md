@@ -1,5 +1,7 @@
 # Bingo Chillin'
 
+![Test Badge](https://github.com/Webbnissarna/bingo-chill-app/actions/workflows/test.yml/badge.svg)
+
 Bingo Chillin' is a bingo web-app designed for playing video game bingos with friends.
 
 There are a few similar apps around (for example https://bingosync.com or just search
