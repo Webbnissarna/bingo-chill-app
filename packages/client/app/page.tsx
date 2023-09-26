@@ -12,10 +12,10 @@ import type {
   GameSetup,
   SessionOptions,
 } from "@webbnissarna/bingo-chill-common/src/game/types";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
 export default function Home() {
-  const [myProfile, setMyProfile] = useLocalStorage<Profile>("", {
+  const [myProfile, setMyProfile] = useLocalStorage<Profile>("myProfile", {
     name: "Me",
     icon: SPOOKY_GHOST_IMAGE_BASE64,
     color: "#5e81ac",
@@ -62,12 +62,15 @@ export default function Home() {
   /////////////////////////////////////////////////////////////////
   // Game Setup
   /////////////////////////////////////////////////////////////////
-  const [gameSetup, setGameSetup] = useState<GameSetup>({
-    name: "",
-    meta: { author: "", timestamp: "", version: "" },
-    checksum: "",
-    tasks: [],
-  });
+  const [gameSetup, setGameSetup] = useLocalStorage<GameSetup>(
+    "lastGameSetup",
+    {
+      name: "",
+      meta: { author: "", timestamp: "", version: "" },
+      checksum: "",
+      tasks: [],
+    },
+  );
 
   const loadGameSetup = async () => {
     const data = await loadFileUTF8ContentFromPicker(".json");
